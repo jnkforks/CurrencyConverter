@@ -9,7 +9,7 @@ class CurrencyCalculatorItemViewModel(private val viewBinding: AdapterCurrencyIt
     RecyclerView.ViewHolder(viewBinding.root) {
 
     fun bind(currencyCalculatorItem: CurrencyCalculatorItem) {
-        bindName(currencyCalculatorItem.name)
+        bindName(currencyCalculatorItem.currencyCode)
         bindValue(currencyCalculatorItem.value)
     }
 

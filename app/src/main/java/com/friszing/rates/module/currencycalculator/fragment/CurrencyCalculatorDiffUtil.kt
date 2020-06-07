@@ -26,8 +26,8 @@ class CurrencyCalculatorDiffUtil(
         val newCurrencyRateItem = newsItems[newItemPosition]
         val oldCurrencyRateItem = oldItems[oldItemPosition]
         val diffBundle = Bundle()
-        if (newCurrencyRateItem.name != oldCurrencyRateItem.name) {
-            diffBundle.putString(KEY_NAME, newCurrencyRateItem.name)
+        if (newCurrencyRateItem.currencyCode != oldCurrencyRateItem.currencyCode) {
+            diffBundle.putString(KEY_NAME, newCurrencyRateItem.currencyCode)
         }
         if (newCurrencyRateItem.value != oldCurrencyRateItem.value) {
             diffBundle.putDouble(KEY_VALUE, newCurrencyRateItem.value)

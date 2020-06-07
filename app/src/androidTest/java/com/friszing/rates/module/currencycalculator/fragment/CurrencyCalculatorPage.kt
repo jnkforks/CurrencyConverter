@@ -36,7 +36,7 @@ internal class CurrencyCalculatorPage {
 
     private fun checkListItem(index: Int, currencyCalculatorItem: CurrencyCalculatorItem) = also {
         CURRENCY_RATES_LIST
-            .check(matches(atPosition(index, hasDescendant(withText(currencyCalculatorItem.name)))))
+            .check(matches(atPosition(index, hasDescendant(withText(currencyCalculatorItem.currencyCode)))))
 
         CURRENCY_RATES_LIST
             .check(

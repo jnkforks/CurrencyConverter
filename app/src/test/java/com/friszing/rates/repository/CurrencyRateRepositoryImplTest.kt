@@ -21,6 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import java.io.IOException
 
 @RunWith(MockitoJUnitRunner::class)
 class CurrencyRateRepositoryImplTest {
@@ -172,6 +173,19 @@ class CurrencyRateRepositoryImplTest {
             testDispatcher.advanceTimeBy(2000)
         }
 
+    @Test(expected = CurrencyRateListParseException::class)
+    fun `Should throw the network error exception when the io exception is thrown by the service`() =
+        runBlockingTest {
+            // GIVEN
+            setUpCurrencyRateServiceWithException(IOException())
+            val ratesFlow = repository.getRates()
+            launch {
+                // WHEN
+                ratesFlow.take(1).toList()
+            }
+
+            testDispatcher.advanceTimeBy(2000)
+        }
 
     private suspend fun setUpCurrencyRateServiceWithException(exception: Throwable) {
         whenever(service.fetchCurrencyRatesList(any())).doAnswer { throw exception }

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RatesApp</string>
+
+    <string name="rates_calculator__unhandled_error_message">The application has encountered an unknown error.\nIt does not appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.</string>
+    <string name="rates_calculator__general_error_message">We encountered an error while processing your request. We apologize for the inconvenience. Please try again.\n If you continue to encounter this error contact our customer support.</string>
+    <string name="rates_calculator__parsing_error_message">@string/rates_calculator__general_error_message</string>
+    <string name="rates_calculator__network_error_message">Unable to connect. Please check your network connection.</string>
+
 </resources>

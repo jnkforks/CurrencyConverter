@@ -6,5 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Implement Currency Rate List Fragment
 - Implement Currency Rate Repository
 - Implement Service Layer with Retrofit

@@ -11,4 +11,8 @@ sealed class CurrencyRateListException(
     class CurrencyRateListParseException(
         override val cause: Throwable?
     ) : CurrencyRateListException(null, cause)
+
+    class CurrencyRateListConnectionErrorException(
+        override val cause: Throwable?
+    ) : CurrencyRateListException(null, cause)
 }

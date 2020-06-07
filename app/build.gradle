@@ -80,7 +80,7 @@ dependencies {
     testImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
     testImplementation "androidx.arch.core:core-testing:$arch_version"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_version"
     testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version"

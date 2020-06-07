@@ -1,13 +1,13 @@
 package com.friszing.rates.di.module
 
 import android.content.SharedPreferences
-import com.friszing.rates.configuration.CurrencyRateRepositoryConfiguration
-import com.friszing.rates.configuration.CurrencyRateRepositoryConfigurationImpl
-import com.friszing.rates.repository.CurrencyRateRepository
-import com.friszing.rates.repository.CurrencyRateRepositoryImpl
-import com.friszing.rates.service.CurrencyRateListResponseMapper
-import com.friszing.rates.service.CurrencyRateListResponseMapperImpl
-import com.friszing.rates.service.CurrencyRateService
+import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorRepositoryConfiguration
+import com.friszing.rates.configuration.CurrencyCalculatorRepositoryConfigurationImpl
+import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
+import com.friszing.rates.currencycalculator.CurrencyCalculatorRepositoryImpl
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
+import com.friszing.rates.currencycalculator.CurrencyRateListResponseMapperImpl
+import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
 import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
 
@@ -21,16 +21,16 @@ class RatesModule {
 
     fun provideCurrencyRateRepositoryConfiguration(
         sharedPreferences: SharedPreferences
-    ): CurrencyRateRepositoryConfiguration =
-        CurrencyRateRepositoryConfigurationImpl(sharedPreferences)
+    ): CurrencyCalculatorRepositoryConfiguration =
+        CurrencyCalculatorRepositoryConfigurationImpl(sharedPreferences)
 
     fun provideCurrencyRateRepository(
         service: CurrencyRateService,
         mapper: CurrencyRateListResponseMapper,
-        repositoryConfiguration: CurrencyRateRepositoryConfiguration,
+        repositoryConfiguration: CurrencyCalculatorRepositoryConfiguration,
         coroutineDispatcher: CoroutineDispatcher
-    ): CurrencyRateRepository =
-        CurrencyRateRepositoryImpl(
+    ): CurrencyCalculatorRepository =
+        CurrencyCalculatorRepositoryImpl(
             service,
             mapper,
             repositoryConfiguration,

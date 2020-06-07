@@ -7,15 +7,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.databinding.AdapterCurrencyItemBinding
+import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 
-class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewModel>() {
+class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewHolder>() {
 
-    private var currencyRateItems = emptyList<CurrencyCalculatorItem>()
+    private val currencyRateItems = mutableListOf<CurrencyCalculatorItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyCalculatorItemViewModel {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CurrencyCalculatorItemViewHolder {
         val viewBinding =
             AdapterCurrencyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CurrencyCalculatorItemViewModel(
+        return CurrencyCalculatorItemViewHolder(
             viewBinding
         )
     }
@@ -23,24 +27,24 @@ class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewModel>(
     override fun getItemCount(): Int = currencyRateItems.size
 
     override fun onBindViewHolder(
-        holder: CurrencyCalculatorItemViewModel,
+        holder: CurrencyCalculatorItemViewHolder,
         position: Int,
         payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) return super.onBindViewHolder(holder, position, payloads)
 
-
         val bundle =
             payloads.first() as? Bundle ?: return super.onBindViewHolder(holder, position, payloads)
 
-        bundle.getString(KEY_NAME)?.let { holder.bindName(it) }
+
+        bundle.getParcelable<CurrencyDetail>(KEY_CURRENCY)?.let(holder::bindCurrency)
 
         if (bundle.containsKey(KEY_VALUE)) {
-            holder.bindValue(bundle.getDouble(KEY_VALUE))
+            holder.bindAmount(bundle.getDouble(KEY_VALUE))
         }
     }
 
-    override fun onBindViewHolder(holder: CurrencyCalculatorItemViewModel, position: Int) =
+    override fun onBindViewHolder(holder: CurrencyCalculatorItemViewHolder, position: Int) =
         holder.bind(currencyRateItems[position])
 
     fun setCurrencyRateItems(newList: List<CurrencyCalculatorItem>) {
@@ -51,11 +55,12 @@ class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewModel>(
             )
         )
         diffResult.dispatchUpdatesTo(this)
-        currencyRateItems = newList
+        currencyRateItems.clear()
+        currencyRateItems += newList
     }
 
     companion object {
-        const val KEY_NAME = "KEY_NAME"
         const val KEY_VALUE = "KEY_VALUE"
+        const val KEY_CURRENCY = "KEY_CURRENCY"
     }
 }

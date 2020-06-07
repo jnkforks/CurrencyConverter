@@ -4,7 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class CurrencyCalculatorItem(
-    val currencyDetail: CurrencyDetail,
-    val value: Double
+data class CurrencyDetail(
+    val currencySymbol: String,
+    val currencyDescription: String,
+    val currencyFlagUrl: String
 ) : Parcelable

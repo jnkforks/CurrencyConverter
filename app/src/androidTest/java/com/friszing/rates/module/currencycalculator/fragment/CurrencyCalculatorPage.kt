@@ -9,7 +9,8 @@ import com.friszing.rates.util.formatCurrency
 import com.friszing.rates.utils.atPosition
 
 
-internal fun currencyCalculatorPage(action: CurrencyCalculatorPage.() -> Unit) = CurrencyCalculatorPage().action()
+internal fun currencyCalculatorPage(action: CurrencyCalculatorPage.() -> Unit) =
+    CurrencyCalculatorPage().action()
 
 internal class CurrencyCalculatorPage {
 
@@ -36,7 +37,14 @@ internal class CurrencyCalculatorPage {
 
     private fun checkListItem(index: Int, currencyCalculatorItem: CurrencyCalculatorItem) = also {
         CURRENCY_RATES_LIST
-            .check(matches(atPosition(index, hasDescendant(withText(currencyCalculatorItem.currencyCode)))))
+            .check(
+                matches(
+                    atPosition(
+                        index,
+                        hasDescendant(withText(currencyCalculatorItem.currencyDetail.currencySymbol))
+                    )
+                )
+            )
 
         CURRENCY_RATES_LIST
             .check(

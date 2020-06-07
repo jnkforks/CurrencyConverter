@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="rates_calculator__padding">16dp</dimen>
+    <dimen name="rates_calculator__margin">16dp</dimen>
+</resources>

@@ -6,4 +6,6 @@
     <string name="rates_calculator__parsing_error_message">@string/rates_calculator__general_error_message</string>
     <string name="rates_calculator__network_error_message">Unable to connect. Please check your network connection.</string>
 
+    <string name="rates_calculator__flag_url_template">https://flagpedia.net/data/flags/w2560/%1$s.png</string>
+
 </resources>

@@ -1,13 +1,11 @@
 package com.friszing.rates.currencycalculator
 
-import com.friszing.rates.module.currencycalculator.mapper.CountryCodeMapper
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyDetailProvider
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
+import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -18,7 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class CurrencyCalculatorItemListMapperImplTest {
 
     @Mock
-    private lateinit var countryCodeMapper: CountryCodeMapper
+    private lateinit var currencyDetailProvider: CurrencyDetailProvider
 
     @InjectMocks
     private lateinit var ratesItemListMapperImpl: CurrencyCalculatorItemListMapperImpl
@@ -29,6 +27,11 @@ class CurrencyCalculatorItemListMapperImplTest {
         val baseCurrency = "EUR"
         val calculationValue = 100.0
         val currencyRateList = CurrencyRateList(baseCurrency, mapOf("USD" to 1.2))
+        val europeanUnion = CurrencyDetail("EUR", "EU", "EUflag")
+        val unitedStates = CurrencyDetail("USD", "US", "USflag")
+
+        setUpCountryCodeMapper("EUR", europeanUnion)
+        setUpCountryCodeMapper("USD", unitedStates)
 
         // WHEN
         val currencyRateItems = ratesItemListMapperImpl.map(currencyRateList, calculationValue)
@@ -36,7 +39,7 @@ class CurrencyCalculatorItemListMapperImplTest {
         // THEN
         assertThat(currencyRateItems.first()).isEqualTo(
             CurrencyCalculatorItem(
-                baseCurrency,
+                europeanUnion,
                 calculationValue
             )
         )
@@ -50,6 +53,11 @@ class CurrencyCalculatorItemListMapperImplTest {
         val currency = "USD"
         val currencyRate = 1.2
         val currencyRateList = CurrencyRateList(baseCurrency, mapOf(currency to currencyRate))
+        val europeanUnion = CurrencyDetail("EUR", "EU", "EU")
+        val unitedStates = CurrencyDetail("USD", "US", "US")
+
+        setUpCountryCodeMapper("EUR", europeanUnion)
+        setUpCountryCodeMapper("USD", unitedStates)
 
         // WHEN
         val currencyRateItems = ratesItemListMapperImpl.map(currencyRateList, calculationValue)
@@ -58,11 +66,11 @@ class CurrencyCalculatorItemListMapperImplTest {
         assertThat(currencyRateItems).isEqualTo(
             listOf(
                 CurrencyCalculatorItem(
-                    baseCurrency,
+                    europeanUnion,
                     calculationValue
                 ),
                 CurrencyCalculatorItem(
-                    currency,
+                    unitedStates,
                     calculationValue * currencyRate
                 )
             )
@@ -76,12 +84,18 @@ class CurrencyCalculatorItemListMapperImplTest {
         val calculationValue = 100.0
         val currencyRateList = CurrencyRateList(baseCurrency, mapOf("USD" to 1.2))
         val countryCodeMapperArgumentCaptor = argumentCaptor<String>()
+        setUpCountryCodeMapper("EUR", mock())
+        setUpCountryCodeMapper("USD", mock())
 
         // WHEN
         ratesItemListMapperImpl.map(currencyRateList, calculationValue)
 
         // THEN
-        verify(countryCodeMapper, times(2)).map(countryCodeMapperArgumentCaptor.capture())
+        verify(currencyDetailProvider, times(2)).provide(countryCodeMapperArgumentCaptor.capture())
         assertThat(countryCodeMapperArgumentCaptor.allValues).isEqualTo(listOf("EUR", "USD"))
+    }
+
+    private fun setUpCountryCodeMapper(currencyCode: String, country: CurrencyDetail) {
+        whenever(currencyDetailProvider.provide(currencyCode)).thenReturn(country)
     }
 }

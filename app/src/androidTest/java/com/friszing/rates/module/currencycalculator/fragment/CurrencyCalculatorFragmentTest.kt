@@ -7,6 +7,7 @@ import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExc
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
+import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyRatesFragmentViewModelFactory
@@ -119,7 +120,9 @@ class CurrencyCalculatorFragmentTest {
     }
 
     private fun setUpCurrencyRatesItemListMapper(currencyCalculatorItems: List<CurrencyCalculatorItem>) {
-        whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(currencyCalculatorItems)
+        whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(
+            currencyCalculatorItems
+        )
     }
 
     private fun setUpCurrencyRateRepository(
@@ -155,7 +158,7 @@ class CurrencyCalculatorFragmentTest {
                 )
             )
         launchFragmentInContainer<CurrencyCalculatorFragment>(
-            themeResId = R.style.Theme_MaterialComponents_NoActionBar,
+            themeResId = R.style.AppTheme,
             factory = factory
         )
     }
@@ -171,11 +174,19 @@ class CurrencyCalculatorFragmentTest {
 
         private val CurrencyRateItems = listOf(
             CurrencyCalculatorItem(
-                BASE_CURRENCY,
+                CurrencyDetail(
+                    BASE_CURRENCY,
+                    "Euro",
+                    "https://flagpedia.net/data/org/w2560/eu.png"
+                ),
                 100.0
             ),
             CurrencyCalculatorItem(
-                CURRENCY,
+                CurrencyDetail(
+                    CURRENCY,
+                    "US Dollars",
+                    "https://flagpedia.net/data/flags/w2560/us.png"
+                ),
                 120.0
             )
         )

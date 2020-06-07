@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Implement The Design of Currency Calculator
 - Implement Country Code Mapper
 - Refactoring in Package and Namings
 - Implement Currency Rate List Fragment

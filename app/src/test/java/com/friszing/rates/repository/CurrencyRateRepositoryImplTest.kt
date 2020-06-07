@@ -3,6 +3,7 @@ package com.friszing.rates.repository
 import com.friszing.rates.configuration.CurrencyRateRepositoryConfiguration
 import com.friszing.rates.exception.CurrencyRateListException.CurrencyRateListGeneralException
 import com.friszing.rates.exception.CurrencyRateListException.CurrencyRateListParseException
+import com.friszing.rates.exception.CurrencyRateListException.CurrencyRateListConnectionErrorException
 import com.friszing.rates.model.CurrencyRateList
 import com.friszing.rates.model.CurrencyRateListResponse
 import com.friszing.rates.service.CurrencyRateListResponseMapper
@@ -173,7 +174,7 @@ class CurrencyRateRepositoryImplTest {
             testDispatcher.advanceTimeBy(2000)
         }
 
-    @Test(expected = CurrencyRateListParseException::class)
+    @Test(expected = CurrencyRateListConnectionErrorException::class)
     fun `Should throw the network error exception when the io exception is thrown by the service`() =
         runBlockingTest {
             // GIVEN

@@ -10,7 +10,7 @@ import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculator
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
-import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyRatesFragmentViewModelFactory
+import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.delay
@@ -150,8 +150,8 @@ class CurrencyCalculatorFragmentTest {
 
     private fun launchFragment() {
         val factory =
-            CurrencyRatesFragmentFactory(
-                CurrencyRatesFragmentViewModelFactory(
+            CurrencyCalculatorFragmentFactory(
+                CurrencyCalculatorFragmentViewModelFactory(
                     ratesRepository,
                     currencyCalculatorItemListMapper,
                     currencyCalculatorExceptionMapper

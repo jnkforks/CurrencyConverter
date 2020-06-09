@@ -6,7 +6,7 @@ import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExc
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 
-class CurrencyRatesFragmentViewModelFactory(
+class CurrencyCalculatorFragmentViewModelFactory(
     private val ratesRepository: CurrencyCalculatorRepository,
     private val currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
     private val currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
@@ -14,7 +14,7 @@ class CurrencyRatesFragmentViewModelFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        CurrencyRatesFragmentViewModel(
+        CurrencyCalculatorFragmentViewModel(
             ratesRepository,
             currencyCalculatorItemListMapper,
             currencyCalculatorExceptionMapper

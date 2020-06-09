@@ -3,7 +3,7 @@ package com.friszing.rates.module.currencycalculator.mapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import java.util.Currency
 
-class CurrencyCountryProviderImpl(
+class CurrencyDetailProviderImpl(
 ) : CurrencyDetailProvider {
 
     private val currencyCountryMap = mapOf(
@@ -44,7 +44,7 @@ class CurrencyCountryProviderImpl(
     override fun provide(currencyCode: String): CurrencyDetail {
         val currency = Currency.getInstance(currencyCode)
         return CurrencyDetail(
-            currency.symbol,
+            currencyCode,
             currency.displayName,
             currencyCountryMap[currencyCode].orEmpty()
         )

@@ -1,16 +1,16 @@
 package com.friszing.rates.module.currencycalculator.fragment
 
 import androidx.fragment.app.FragmentFactory
-import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyRatesFragmentViewModelFactory
+import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 
-class CurrencyRatesFragmentFactory(
-    private val currencyRatesFragmentViewModelFactory: CurrencyRatesFragmentViewModelFactory
+class CurrencyCalculatorFragmentFactory(
+    private val currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String) =
         when (className) {
             CurrencyCalculatorFragment::class.qualifiedName -> CurrencyCalculatorFragment(
-                currencyRatesFragmentViewModelFactory
+                currencyCalculatorFragmentViewModelFactory
             )
             else -> super.instantiate(classLoader, className)
         }

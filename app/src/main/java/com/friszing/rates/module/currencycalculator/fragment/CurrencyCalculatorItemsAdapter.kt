@@ -9,8 +9,17 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.databinding.AdapterCurrencyItemBinding
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 
+typealias OnCurrencyCalculatorItemClick = (CurrencyCalculatorItem) -> Unit
+typealias OnBaseCurrencyChanged = () -> Unit
+
 class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewHolder>() {
 
+    init {
+        setHasStableIds(true)
+    }
+
+    private var currencyCalculatorItemClick: OnCurrencyCalculatorItemClick? = null
+    private var baseCurrencyChanged: OnBaseCurrencyChanged? = null
     private val currencyRateItems = mutableListOf<CurrencyCalculatorItem>()
 
     override fun onCreateViewHolder(
@@ -20,9 +29,16 @@ class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewHolder>
         val viewBinding =
             AdapterCurrencyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CurrencyCalculatorItemViewHolder(
-            viewBinding
+            viewBinding,
+            viewType == BASE_CURRENCY_VIEW_TYPE
         )
     }
+
+    override fun getItemViewType(position: Int) =
+        if (position == 0) BASE_CURRENCY_VIEW_TYPE else OTHER_CURRENCY_VIEW_TYPE
+
+    override fun getItemId(position: Int): Long =
+        currencyRateItems[position].currencyDetail.currencySymbol.hashCode().toLong()
 
     override fun getItemCount(): Int = currencyRateItems.size
 
@@ -44,23 +60,47 @@ class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewHolder>
         }
     }
 
-    override fun onBindViewHolder(holder: CurrencyCalculatorItemViewHolder, position: Int) =
-        holder.bind(currencyRateItems[position])
+    override fun onBindViewHolder(holder: CurrencyCalculatorItemViewHolder, position: Int) {
+        val currencyRateItem = currencyRateItems[position]
+        holder.bind(currencyRateItem)
+        holder.itemView.setOnClickListener {
+            currencyCalculatorItemClick?.invoke(
+                currencyRateItem
+            )
+        }
+    }
+
+    fun onCurrencyCalculatorItemClickListener(currencyCalculatorItemClick: OnCurrencyCalculatorItemClick) {
+        this.currencyCalculatorItemClick = currencyCalculatorItemClick
+    }
+
+    fun onBaseCurrencyChanged(baseCurrencyChanged: OnBaseCurrencyChanged) {
+        this.baseCurrencyChanged = baseCurrencyChanged
+    }
 
     fun setCurrencyRateItems(newList: List<CurrencyCalculatorItem>) {
+        val isBaseCurrencyChanged =
+            newList.firstOrNull()?.currencyDetail?.currencySymbol != currencyRateItems.firstOrNull()?.currencyDetail?.currencySymbol
+
         val diffResult = DiffUtil.calculateDiff(
             CurrencyCalculatorDiffUtil(
                 currencyRateItems,
                 newList
             )
         )
+
         diffResult.dispatchUpdatesTo(this)
         currencyRateItems.clear()
         currencyRateItems += newList
+
+        if (isBaseCurrencyChanged)
+            baseCurrencyChanged?.invoke()
     }
 
     companion object {
         const val KEY_VALUE = "KEY_VALUE"
         const val KEY_CURRENCY = "KEY_CURRENCY"
+        const val BASE_CURRENCY_VIEW_TYPE = 1
+        const val OTHER_CURRENCY_VIEW_TYPE = 2
     }
 }

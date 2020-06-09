@@ -1,6 +1,6 @@
-package com.friszing.rates.currencycalculator
+package com.friszing.rates.module.currencycalculator.mapper
 
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyDetailProvider
+import com.friszing.rates.currencycalculator.CurrencyCalculatorItemListMapperImpl
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList

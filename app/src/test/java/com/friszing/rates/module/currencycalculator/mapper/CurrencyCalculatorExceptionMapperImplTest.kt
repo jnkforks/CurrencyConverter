@@ -1,6 +1,7 @@
-package com.friszing.rates.currencycalculator
+package com.friszing.rates.module.currencycalculator.mapper
 
 import com.friszing.rates.R
+import com.friszing.rates.currencycalculator.CurrencyCalculatorExceptionMapperImpl
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorParseException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
@@ -23,7 +24,7 @@ class CurrencyCalculatorExceptionMapperImplTest {
     fun `Should map the general error exception`() {
         // WHEN
         val errorMessageId =
-            currencyRatesExceptionMapperImpl.map(CurrencyCalculatorGeneralException(null))
+            currencyRatesExceptionMapperImpl.map(CurrencyCalculatorGeneralException())
 
         // THEN
         assertThat(errorMessageId).isEqualTo(R.string.rates_calculator__general_error_message)
@@ -33,7 +34,7 @@ class CurrencyCalculatorExceptionMapperImplTest {
     fun `Should map the parse error exception`() {
         // WHEN
         val errorMessageId =
-            currencyRatesExceptionMapperImpl.map(CurrencyCalculatorParseException(null))
+            currencyRatesExceptionMapperImpl.map(CurrencyCalculatorParseException())
 
         // THEN
         assertThat(errorMessageId).isEqualTo(R.string.rates_calculator__parsing_error_message)
@@ -43,7 +44,7 @@ class CurrencyCalculatorExceptionMapperImplTest {
     fun `Should map the connection error exception`() {
         // WHEN
         val errorMessageId =
-            currencyRatesExceptionMapperImpl.map(CurrencyCalculatorConnectionErrorException(null))
+            currencyRatesExceptionMapperImpl.map(CurrencyCalculatorConnectionErrorException())
 
         // THEN
         assertThat(errorMessageId).isEqualTo(R.string.rates_calculator__network_error_message)

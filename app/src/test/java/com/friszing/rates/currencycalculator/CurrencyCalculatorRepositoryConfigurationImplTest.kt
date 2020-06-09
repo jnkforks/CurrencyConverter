@@ -1,7 +1,6 @@
 package com.friszing.rates.currencycalculator
 
 import android.content.SharedPreferences
-import com.friszing.rates.configuration.CurrencyCalculatorRepositoryConfigurationImpl
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock

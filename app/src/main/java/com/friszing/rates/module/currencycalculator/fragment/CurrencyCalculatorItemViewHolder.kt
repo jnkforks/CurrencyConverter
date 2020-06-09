@@ -9,11 +9,13 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.util.formatCurrency
 
 class CurrencyCalculatorItemViewHolder(
-    private val viewBinding: AdapterCurrencyItemBinding
+    private val viewBinding: AdapterCurrencyItemBinding,
+    private val isBaseCurrencyHolder: Boolean
 ) :
     RecyclerView.ViewHolder(viewBinding.root) {
 
     fun bind(currencyCalculatorItem: CurrencyCalculatorItem) {
+        viewBinding.amount.isEnabled = isBaseCurrencyHolder
         bindAmount(currencyCalculatorItem.value)
         bindCurrency(currencyCalculatorItem.currencyDetail)
     }
@@ -25,6 +27,7 @@ class CurrencyCalculatorItemViewHolder(
             .load(country.currencyFlagUrl)
             .apply(RequestOptions().circleCrop())
             .into(viewBinding.currencyFlag)
+        viewBinding.currencyFlag.contentDescription = country.currencyDescription
     }
 
     fun bindAmount(value: Double) = viewBinding.amount.setText(value.formatCurrency())

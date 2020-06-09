@@ -13,7 +13,7 @@ class CurrencyCalculatorDiffUtil(
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        oldItems[oldItemPosition] === newsItems[newItemPosition]
+        oldItems[oldItemPosition].currencyDetail.currencySymbol == newsItems[newItemPosition].currencyDetail.currencySymbol
 
     override fun getOldListSize() = oldItems.size
 

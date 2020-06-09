@@ -1,4 +1,4 @@
-package com.friszing.rates.configuration
+package com.friszing.rates.currencycalculator
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Proguard activated
 - Implement Base Item Change Util
 - Show Currency Calculator in MainActivity
 - Implement The Design of Currency Calculator

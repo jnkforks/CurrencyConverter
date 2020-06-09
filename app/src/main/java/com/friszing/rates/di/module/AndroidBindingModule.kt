@@ -5,7 +5,6 @@ import com.friszing.rates.di.scope.CurrencyCalculatorScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
-
 @Module
 abstract class AndroidBindingModule {
 

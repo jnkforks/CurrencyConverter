@@ -3,10 +3,10 @@ package com.friszing.rates.module.currencycalculator.fragment
 import androidx.annotation.StringRes
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.friszing.rates.R
+import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
-import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
@@ -31,6 +31,9 @@ class CurrencyCalculatorFragmentTest {
 
     @Mock
     private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+
+    @Mock
+    lateinit var currencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
 
     @Test
     fun should_show_the_currency_rates_fragment() =
@@ -115,14 +118,18 @@ class CurrencyCalculatorFragmentTest {
         }
     }
 
-    private fun setUpCurrencyRatesExceptionMapper(@StringRes value: Int) {
-        whenever(currencyCalculatorExceptionMapper.map(any())).thenReturn(value)
+    private fun setUpCurrencyRatesExceptionMapper(
+        @StringRes value: Int
+    ) {
+        whenever(currencyCalculatorExceptionMapper.map(any()))
+            .thenReturn(value)
     }
 
-    private fun setUpCurrencyRatesItemListMapper(currencyCalculatorItems: List<CurrencyCalculatorItem>) {
-        whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(
-            currencyCalculatorItems
-        )
+    private fun setUpCurrencyRatesItemListMapper(
+        currencyCalculatorItems: List<CurrencyCalculatorItem>
+    ) {
+        whenever(currencyCalculatorItemListMapper.map(any(), any()))
+            .thenReturn(currencyCalculatorItems)
     }
 
     private fun setUpCurrencyRateRepository(
@@ -131,13 +138,15 @@ class CurrencyCalculatorFragmentTest {
         delayMillis: Long = 0,
         times: Int = 1
     ) {
-        whenever(ratesRepository.getRates()).thenReturn(flow {
-            repeat(times) {
-                delay(initialDelayMillis)
-                emit(currencyRateList)
-                delay(delayMillis)
+        whenever(ratesRepository.getRates()).thenReturn(
+            flow {
+                repeat(times) {
+                    delay(initialDelayMillis)
+                    emit(currencyRateList)
+                    delay(delayMillis)
+                }
             }
-        })
+        )
     }
 
     private fun setUpCurrencyRateRepositoryWithException(
@@ -155,7 +164,8 @@ class CurrencyCalculatorFragmentTest {
                     ratesRepository,
                     currencyCalculatorItemListMapper,
                     currencyCalculatorExceptionMapper
-                )
+                ),
+                currencyDiffUtil
             )
         launchFragmentInContainer<CurrencyCalculatorFragment>(
             themeResId = R.style.AppTheme,

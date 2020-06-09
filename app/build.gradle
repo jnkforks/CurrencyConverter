@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 android {
     signingConfigs {
@@ -121,4 +122,29 @@ dependencies {
     debugImplementation "androidx.arch.core:core-testing:$arch_version"
     debugImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version"
     debugImplementation "androidx.navigation:navigation-testing:$nav_version"
+}
+
+
+ktlint {
+    version = "0.37.1"
+    debug = true
+    verbose = true
+    android = true
+    outputToConsole = true
+    outputColorName = "RED"
+    ignoreFailures = true
+    enableExperimentalRules = true
+    additionalEditorconfigFile = file("/some/additional/.editorconfig")
+    disabledRules = ["final-newline"]
+    reporters {
+        reporter "html"
+        reporter "checkstyle"
+    }
+    kotlinScriptAdditionalPaths {
+        include fileTree("scripts/")
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
 }

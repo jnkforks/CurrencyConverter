@@ -5,7 +5,6 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-
 class CurrencyCalculatorBaseCurrencyDiffUtilImplTest {
 
     @Test

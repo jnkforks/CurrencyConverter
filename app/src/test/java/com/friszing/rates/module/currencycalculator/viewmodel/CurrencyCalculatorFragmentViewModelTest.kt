@@ -1,8 +1,7 @@
 package com.friszing.rates.module.currencycalculator.viewmodel
 
-import TestCoroutineRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.*
+import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentViewState
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
@@ -10,8 +9,13 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
+import com.friszing.rates.util.TestCoroutineRule
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -21,8 +25,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import java.lang.NullPointerException
-
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -114,7 +116,6 @@ class CurrencyCalculatorFragmentViewModelTest {
             )
         )
     }
-
 
     @Test
     fun `Should retry fetching the currency rates when the currency rates fetching fails because of the connection error exception`() {
@@ -230,8 +231,9 @@ class CurrencyCalculatorFragmentViewModelTest {
         )
     }
 
-
-    private fun setUpCurrencyCalculatorExceptionMapper(errorId: Int) {
+    private fun setUpCurrencyCalculatorExceptionMapper(
+        errorId: Int
+    ) {
         whenever(currencyCalculatorExceptionMapper.map(any())).thenReturn(errorId)
     }
 
@@ -245,7 +247,7 @@ class CurrencyCalculatorFragmentViewModelTest {
 
             if (!isNetworkErrorThrown) {
                 isNetworkErrorThrown = true
-                throw  CurrencyCalculatorConnectionErrorException(null)
+                throw CurrencyCalculatorConnectionErrorException(null)
             } else {
                 emit(mock())
             }
@@ -257,10 +259,12 @@ class CurrencyCalculatorFragmentViewModelTest {
         exception: Throwable,
         delayMillis: Long = 1000L
     ) {
-        whenever(ratesRepository.getRates()).thenReturn(flow {
-            delay(delayMillis)
-            throw exception
-        })
+        whenever(ratesRepository.getRates()).thenReturn(
+            flow {
+                delay(delayMillis)
+                throw exception
+            }
+        )
     }
 
     private fun setUpCurrencyRateRepositoryWithErrorAfterSuccessfulReturn(
@@ -268,30 +272,36 @@ class CurrencyCalculatorFragmentViewModelTest {
     ) {
         var isSuccessfulResponseEmitted = false
 
-        whenever(ratesRepository.getRates()).thenReturn(flow {
-            while (true) {
-                delay(1000)
-                if (!isSuccessfulResponseEmitted) {
-                    isSuccessfulResponseEmitted = true
-                    emit(currencyRateList)
-                } else {
-                    throw Exception()
+        whenever(ratesRepository.getRates()).thenReturn(
+            flow {
+                while (true) {
+                    delay(1000)
+                    if (!isSuccessfulResponseEmitted) {
+                        isSuccessfulResponseEmitted = true
+                        emit(currencyRateList)
+                    } else {
+                        throw Exception()
+                    }
                 }
             }
-        })
+        )
     }
 
     private fun setUpCurrencyRateRepository(
         mockCurrencyRateList: CurrencyRateList,
         delayMillis: Long = 1000L
     ) {
-        whenever(ratesRepository.getRates()).thenReturn(flow {
-            delay(delayMillis)
-            emit(mockCurrencyRateList)
-        })
+        whenever(ratesRepository.getRates()).thenReturn(
+            flow {
+                delay(delayMillis)
+                emit(mockCurrencyRateList)
+            }
+        )
     }
 
-    private fun setUpCurrencyRatesItemListMapper(mockCurrencyCalculatorItems: List<CurrencyCalculatorItem>) {
+    private fun setUpCurrencyRatesItemListMapper(
+        mockCurrencyCalculatorItems: List<CurrencyCalculatorItem>
+    ) {
         whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(
             mockCurrencyCalculatorItems
         )

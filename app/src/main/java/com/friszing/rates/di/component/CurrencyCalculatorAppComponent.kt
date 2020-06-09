@@ -1,10 +1,10 @@
 package com.friszing.rates.di.component
 
-import com.friszing.rates.di.module.HttpModule
-import com.friszing.rates.di.module.StorageModule
 import android.app.Application
 import com.friszing.rates.App
 import com.friszing.rates.di.module.AndroidBindingModule
+import com.friszing.rates.di.module.HttpModule
+import com.friszing.rates.di.module.StorageModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule

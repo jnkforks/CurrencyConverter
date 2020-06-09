@@ -2,12 +2,14 @@ package com.friszing.rates.module.currencycalculator.fragment
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import com.friszing.rates.R
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.util.formatCurrency
 import com.friszing.rates.utils.atPosition
-
 
 internal fun currencyCalculatorPage(action: CurrencyCalculatorPage.() -> Unit) =
     CurrencyCalculatorPage().action()

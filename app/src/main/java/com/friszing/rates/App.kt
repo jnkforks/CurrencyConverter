@@ -16,6 +16,5 @@ class App : DaggerApplication(), HasAndroidInjector {
             .application(this)
             .build()
 
-
     override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 }

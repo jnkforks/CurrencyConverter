@@ -6,18 +6,15 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.friszing.rates.R
+import com.friszing.rates.databinding.FragmentCurrencyRatesBinding
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModel
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
-import com.friszing.rates.databinding.FragmentCurrencyRatesBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import com.google.android.material.snackbar.Snackbar
 
 class CurrencyCalculatorFragment(

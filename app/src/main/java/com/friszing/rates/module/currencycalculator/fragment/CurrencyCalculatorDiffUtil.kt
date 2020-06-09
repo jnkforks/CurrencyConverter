@@ -3,8 +3,8 @@ package com.friszing.rates.module.currencycalculator.fragment
 import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorItemsAdapter.Companion.KEY_CURRENCY
-import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorItemsAdapter.Companion.KEY_VALUE
+import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 
 
 class CurrencyCalculatorDiffUtil(
@@ -13,7 +13,8 @@ class CurrencyCalculatorDiffUtil(
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        oldItems[oldItemPosition].currencyDetail.currencySymbol == newsItems[newItemPosition].currencyDetail.currencySymbol
+        oldItems[oldItemPosition].currencyDetail.currencySymbol ==
+                newsItems[newItemPosition].currencyDetail.currencySymbol
 
     override fun getOldListSize() = oldItems.size
 
@@ -40,5 +41,4 @@ class CurrencyCalculatorDiffUtil(
             newItemPosition
         ) else diffBundle
     }
-
 }

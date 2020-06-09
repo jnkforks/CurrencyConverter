@@ -55,7 +55,6 @@ class CurrencyCalculatorItemsAdapter(
         val bundle =
             payloads.first() as? Bundle ?: return super.onBindViewHolder(holder, position, payloads)
 
-
         bundle.getParcelable<CurrencyDetail>(KEY_CURRENCY)?.let(holder::bindCurrency)
 
         if (bundle.containsKey(KEY_VALUE)) {
@@ -73,7 +72,9 @@ class CurrencyCalculatorItemsAdapter(
         }
     }
 
-    fun onCurrencyCalculatorItemClickListener(currencyCalculatorItemClick: OnCurrencyCalculatorItemClick) {
+    fun onCurrencyCalculatorItemClickListener(
+        currencyCalculatorItemClick: OnCurrencyCalculatorItemClick
+    ) {
         this.currencyCalculatorItemClick = currencyCalculatorItemClick
     }
 
@@ -96,8 +97,9 @@ class CurrencyCalculatorItemsAdapter(
         currencyRateItems.clear()
         currencyRateItems += newList
 
-        if (isBaseCurrencyChanged)
+        if (isBaseCurrencyChanged) {
             baseCurrencyChanged?.invoke()
+        }
     }
 
     companion object {

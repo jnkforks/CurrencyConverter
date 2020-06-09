@@ -1,28 +1,33 @@
 package com.friszing.rates.currencycalculator
 
 import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorRepositoryConfiguration
+import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorParseException
-import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateListResponse
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
+import org.junit.Test
 import org.mockito.junit.MockitoJUnitRunner
-import java.io.IOException
+import org.mockito.Mock
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)

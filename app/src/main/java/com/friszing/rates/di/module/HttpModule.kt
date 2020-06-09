@@ -27,5 +27,4 @@ class HttpModule {
             .baseUrl("https://hiring.revolut.codes/api/")
             .addConverterFactory(moshiConverterFactory)
             .build()
-
 }

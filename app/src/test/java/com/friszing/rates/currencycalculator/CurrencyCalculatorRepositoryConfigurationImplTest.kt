@@ -23,7 +23,7 @@ class CurrencyCalculatorRepositoryConfigurationImplTest {
 
     @Test
     fun `Should provide the base currency from the shared preferences`() {
-        //GIVEN
+        // GIVEN
         whenever(sharedPreferences.getString(any(), any())).thenReturn("EUR")
 
         // WHEN

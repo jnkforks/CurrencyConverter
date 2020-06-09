@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Ktlint integrated
 - Proguard activated
 - Implement Base Item Change Util
 - Show Currency Calculator in MainActivity

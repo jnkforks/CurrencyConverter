@@ -8,7 +8,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 
-
 class CurrencyRateListResponseMapperImplTest {
 
     private lateinit var mapper: CurrencyRateListResponseMapperImpl

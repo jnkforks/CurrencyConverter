@@ -2,13 +2,12 @@ package com.friszing.rates.module.currencycalculator.mapper
 
 import com.friszing.rates.R
 import com.friszing.rates.currencycalculator.CurrencyCalculatorExceptionMapperImpl
+import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorParseException
-import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.lang.Exception
 
 class CurrencyCalculatorExceptionMapperImplTest {
 

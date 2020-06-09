@@ -12,7 +12,10 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 typealias OnCurrencyCalculatorItemClick = (CurrencyCalculatorItem) -> Unit
 typealias OnBaseCurrencyChanged = () -> Unit
 
-class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewHolder>() {
+class CurrencyCalculatorItemsAdapter(
+    private val baseCurrencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
+) :
+    Adapter<CurrencyCalculatorItemViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -80,7 +83,7 @@ class CurrencyCalculatorItemsAdapter : Adapter<CurrencyCalculatorItemViewHolder>
 
     fun setCurrencyRateItems(newList: List<CurrencyCalculatorItem>) {
         val isBaseCurrencyChanged =
-            newList.firstOrNull()?.currencyDetail?.currencySymbol != currencyRateItems.firstOrNull()?.currencyDetail?.currencySymbol
+            baseCurrencyDiffUtil.isBaseCurrenciesDifferent(currencyRateItems, newList)
 
         val diffResult = DiffUtil.calculateDiff(
             CurrencyCalculatorDiffUtil(

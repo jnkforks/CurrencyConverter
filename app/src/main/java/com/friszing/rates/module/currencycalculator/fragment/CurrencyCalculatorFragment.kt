@@ -21,7 +21,8 @@ import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import com.google.android.material.snackbar.Snackbar
 
 class CurrencyCalculatorFragment(
-    private val currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory
+    private val currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory,
+    currencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
 ) : Fragment() {
 
     private val currencyCalculatorFragmentViewModel: CurrencyCalculatorFragmentViewModel by viewModels(
@@ -39,7 +40,7 @@ class CurrencyCalculatorFragment(
     }
 
     private val currencyRateItemsAdapter =
-        CurrencyCalculatorItemsAdapter()
+        CurrencyCalculatorItemsAdapter(currencyDiffUtil)
 
     override fun onCreateView(
         inflater: LayoutInflater,

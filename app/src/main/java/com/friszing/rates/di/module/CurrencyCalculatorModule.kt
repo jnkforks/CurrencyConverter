@@ -9,6 +9,8 @@ import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculato
 import com.friszing.rates.currencycalculator.CurrencyCalculatorRepositoryImpl
 import com.friszing.rates.currencycalculator.CurrencyRateListResponseMapperImpl
 import com.friszing.rates.di.scope.CurrencyCalculatorScope
+import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorBaseCurrencyDiffUtil
+import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorBaseCurrencyDiffUtilImpl
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentFactory
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyDetailProviderImpl
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
@@ -89,7 +91,16 @@ class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
+    fun provideCurrencyCalculatorBaseCurrencyDiffUtil(): CurrencyCalculatorBaseCurrencyDiffUtil =
+        CurrencyCalculatorBaseCurrencyDiffUtilImpl()
+
+    @CurrencyCalculatorScope
+    @Provides
     fun provideCurrencyCalculatorFragmentFactory(
-        currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory
-    ) = CurrencyCalculatorFragmentFactory(currencyCalculatorFragmentViewModelFactory)
+        currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory,
+        currencyCalculatorBaseCurrencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
+    ) = CurrencyCalculatorFragmentFactory(
+        currencyCalculatorFragmentViewModelFactory,
+        currencyCalculatorBaseCurrencyDiffUtil
+    )
 }

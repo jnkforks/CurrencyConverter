@@ -5,10 +5,8 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import com.friszing.rates.R
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
-import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 import com.nhaarman.mockitokotlin2.any
@@ -27,9 +25,6 @@ class CurrencyCalculatorFragmentTest {
     private lateinit var ratesRepository: CurrencyCalculatorRepository
 
     @Mock
-    private lateinit var currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper
-
-    @Mock
     private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
 
     @Mock
@@ -39,8 +34,7 @@ class CurrencyCalculatorFragmentTest {
     fun should_show_the_currency_rates_fragment() =
         currencyCalculatorPage {
             // GIVEN
-            setUpCurrencyRateRepository(CurrencyRateList)
-            setUpCurrencyRatesItemListMapper(CurrencyRateItems)
+            setUpCurrencyRateRepository(CurrencyRateItems)
 
             // WHEN
             launchFragment()
@@ -53,8 +47,7 @@ class CurrencyCalculatorFragmentTest {
     fun should_show_the_current_rate_items_list() =
         currencyCalculatorPage {
             // GIVEN
-            setUpCurrencyRateRepository(CurrencyRateList)
-            setUpCurrencyRatesItemListMapper(CurrencyRateItems)
+            setUpCurrencyRateRepository(CurrencyRateItems)
 
             // WHEN
             launchFragment()
@@ -68,11 +61,10 @@ class CurrencyCalculatorFragmentTest {
         currencyCalculatorPage {
             // GIVEN
             setUpCurrencyRateRepository(
-                CurrencyRateList,
+                CurrencyRateItems,
                 times = 4,
                 delayMillis = 2000L
             )
-            setUpCurrencyRatesItemListMapper(CurrencyRateItems)
 
             // WHEN
             launchFragment()
@@ -86,10 +78,9 @@ class CurrencyCalculatorFragmentTest {
         currencyCalculatorPage {
             // GIVEN
             setUpCurrencyRateRepository(
-                CurrencyRateList,
+                CurrencyRateItems,
                 2000
             )
-            setUpCurrencyRatesItemListMapper(CurrencyRateItems)
 
             // WHEN
             launchFragment()
@@ -108,7 +99,6 @@ class CurrencyCalculatorFragmentTest {
                 )
             )
             setUpCurrencyRatesExceptionMapper(R.string.rates_calculator__general_error_message)
-            setUpCurrencyRatesItemListMapper(CurrencyRateItems)
 
             // WHEN
             launchFragment()
@@ -125,15 +115,8 @@ class CurrencyCalculatorFragmentTest {
             .thenReturn(value)
     }
 
-    private fun setUpCurrencyRatesItemListMapper(
-        currencyCalculatorItems: List<CurrencyCalculatorItem>
-    ) {
-        whenever(currencyCalculatorItemListMapper.map(any(), any()))
-            .thenReturn(currencyCalculatorItems)
-    }
-
     private fun setUpCurrencyRateRepository(
-        currencyRateList: CurrencyRateList,
+        currencyRateList: List<CurrencyCalculatorItem>,
         initialDelayMillis: Long = 0,
         delayMillis: Long = 0,
         times: Int = 1
@@ -162,7 +145,6 @@ class CurrencyCalculatorFragmentTest {
             CurrencyCalculatorFragmentFactory(
                 CurrencyCalculatorFragmentViewModelFactory(
                     ratesRepository,
-                    currencyCalculatorItemListMapper,
                     currencyCalculatorExceptionMapper
                 ),
                 currencyDiffUtil
@@ -176,11 +158,6 @@ class CurrencyCalculatorFragmentTest {
     private companion object {
         private const val BASE_CURRENCY = "EUR"
         private const val CURRENCY = "USD"
-        private const val CURRENCY_RATE = 1.2
-        private val CurrencyRateList = CurrencyRateList(
-            BASE_CURRENCY,
-            mapOf(CURRENCY to CURRENCY_RATE)
-        )
 
         private val CurrencyRateItems = listOf(
             CurrencyCalculatorItem(

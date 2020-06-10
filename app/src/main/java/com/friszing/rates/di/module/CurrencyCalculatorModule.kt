@@ -52,11 +52,13 @@ class CurrencyCalculatorModule {
     @Provides
     fun provideCurrencyRateRepository(
         service: CurrencyRateService,
-        mapper: CurrencyRateListResponseMapper,
+        responseMapper: CurrencyRateListResponseMapper,
+        currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
         repositoryConfiguration: CurrencyCalculatorRepositoryConfiguration
     ): CurrencyCalculatorRepository = CurrencyCalculatorRepositoryImpl(
         service,
-        mapper,
+        responseMapper,
+        currencyCalculatorItemListMapper,
         repositoryConfiguration,
         IO
     )
@@ -81,11 +83,9 @@ class CurrencyCalculatorModule {
     @Provides
     fun provideCurrencyCalculatorFragmentViewModelFactory(
         ratesRepository: CurrencyCalculatorRepository,
-        currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
         currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
     ) = CurrencyCalculatorFragmentViewModelFactory(
         ratesRepository,
-        currencyCalculatorItemListMapper,
         currencyCalculatorExceptionMapper
     )
 

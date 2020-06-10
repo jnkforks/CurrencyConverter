@@ -8,7 +8,6 @@ import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculato
 
 class CurrencyCalculatorFragmentViewModelFactory(
     private val ratesRepository: CurrencyCalculatorRepository,
-    private val currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
     private val currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
 ) : Factory {
 
@@ -16,7 +15,6 @@ class CurrencyCalculatorFragmentViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         CurrencyCalculatorFragmentViewModel(
             ratesRepository,
-            currencyCalculatorItemListMapper,
             currencyCalculatorExceptionMapper
         ) as T
 }

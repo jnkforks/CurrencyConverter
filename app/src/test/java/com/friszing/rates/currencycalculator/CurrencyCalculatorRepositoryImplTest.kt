@@ -4,7 +4,9 @@ import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalcul
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorParseException
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
+import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateListResponse
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
@@ -17,6 +19,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -37,7 +40,10 @@ class CurrencyCalculatorRepositoryImplTest {
     private lateinit var service: CurrencyRateService
 
     @Mock
-    private lateinit var mapper: CurrencyRateListResponseMapper
+    private lateinit var responseMapper: CurrencyRateListResponseMapper
+
+    @Mock
+    private lateinit var currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper
 
     @Mock
     private lateinit var repositoryConfiguration: CurrencyCalculatorRepositoryConfiguration
@@ -52,12 +58,13 @@ class CurrencyCalculatorRepositoryImplTest {
         setUpRequestIntervalMillis(1000)
         setUpCurrencyRateListResponseMapper(mock())
         setUpCurrencyRateService(mock())
-
+        setUpCurrencyCalculatorItemListMapper(mock())
         testDispatcher = TestCoroutineDispatcher()
         repository =
             CurrencyCalculatorRepositoryImpl(
                 service,
-                mapper,
+                responseMapper,
+                currencyCalculatorItemListMapper,
                 repositoryConfiguration,
                 testDispatcher
             )
@@ -70,7 +77,7 @@ class CurrencyCalculatorRepositoryImplTest {
             val ratesFlow = repository.getRates()
             launch {
                 // WHEN
-                val dataList = ratesFlow.take(4).toList()
+                val dataList = ratesFlow.catch { }.take(4).toList()
 
                 // THEN
                 assertThat(dataList.size).isEqualTo(4)
@@ -82,11 +89,9 @@ class CurrencyCalculatorRepositoryImplTest {
     @Test
     fun `Should fetch the currency rate list from the currency rate service with specified period`() =
         runBlockingTest {
-            // GIVEN
-            val ratesFlow = repository.getRates()
             launch {
                 // WHEN
-                ratesFlow.take(4).toList()
+                repository.getRates().catch { }.take(4).toList()
 
                 // THEN
                 verify(service, times(4)).fetchCurrencyRatesList(any())
@@ -98,11 +103,9 @@ class CurrencyCalculatorRepositoryImplTest {
     @Test
     fun `Should fetch the currency rate list from the currency rate service with the base currency`() =
         runBlockingTest {
-            // GIVEN
-            val ratesFlow = repository.getRates()
             launch {
                 // WHEN
-                ratesFlow.take(1).toList()
+                repository.getRates().catch { }.take(1).toList()
 
                 // THEN
                 verify(service).fetchCurrencyRatesList("EUR")
@@ -115,13 +118,12 @@ class CurrencyCalculatorRepositoryImplTest {
     fun `Should map the currency rate list response with specified period`() =
         runBlockingTest {
             // GIVEN
-            val ratesFlow = repository.getRates()
             launch {
                 // WHEN
-                ratesFlow.take(4).toList()
+                repository.getRates().catch { }.take(4).toList()
 
                 // THEN
-                verify(mapper, times(4)).map(any())
+                verify(responseMapper, times(4)).map(any())
             }
 
             testDispatcher.advanceTimeBy(5000)
@@ -199,7 +201,7 @@ class CurrencyCalculatorRepositoryImplTest {
     }
 
     private fun setUpCurrencyRateListResponseMapperWithException(exception: Throwable) {
-        whenever(mapper.map(any())).doAnswer { throw exception }
+        whenever(responseMapper.map(any())).doAnswer { throw exception }
     }
 
     private fun setUpCurrencyRateService(currencyRateListResponse: CurrencyRateListResponse) {
@@ -209,7 +211,15 @@ class CurrencyCalculatorRepositoryImplTest {
     }
 
     private fun setUpCurrencyRateListResponseMapper(currencyRateList: CurrencyRateList) {
-        whenever(mapper.map(any())).thenReturn(currencyRateList)
+        whenever(responseMapper.map(any())).thenReturn(currencyRateList)
+    }
+
+    private fun setUpCurrencyCalculatorItemListMapper(
+        currencyCalculatorItem: List<CurrencyCalculatorItem>
+    ) {
+        whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(
+            currencyCalculatorItem
+        )
     }
 
     private fun setUpRequestIntervalMillis(requestIntervalMillis: Long) {

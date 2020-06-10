@@ -4,10 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentViewState
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
-import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.util.TestCoroutineRule
 import com.jraska.livedata.test
@@ -39,9 +37,6 @@ class CurrencyCalculatorFragmentViewModelTest {
     private lateinit var ratesRepository: CurrencyCalculatorRepository
 
     @Mock
-    private lateinit var currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper
-
-    @Mock
     private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
 
     private lateinit var viewModel: CurrencyCalculatorFragmentViewModel
@@ -49,10 +44,8 @@ class CurrencyCalculatorFragmentViewModelTest {
     @Test
     fun `Should show the recent currency rates when it is fetched successfully`() {
         // GIVEN
-        val mockCurrencyRateList = mock<CurrencyRateList>()
         val mockCurrencyRateItems = mock<List<CurrencyCalculatorItem>>()
-        setUpCurrencyRateRepository(mockCurrencyRateList)
-        setUpCurrencyRatesItemListMapper(mockCurrencyRateItems)
+        setUpCurrencyRateRepository(mockCurrencyRateItems)
 
         // WHEN
         viewModel = createViewModel()
@@ -93,10 +86,8 @@ class CurrencyCalculatorFragmentViewModelTest {
         // GIVEN
         val errorId = -1
         setUpCurrencyCalculatorExceptionMapper(errorId)
-        val mockCurrencyRateList = mock<CurrencyRateList>()
         val mockCurrencyRateItems = mock<List<CurrencyCalculatorItem>>()
-        setUpCurrencyRateRepositoryWithErrorAfterSuccessfulReturn(mockCurrencyRateList)
-        setUpCurrencyRatesItemListMapper(mockCurrencyRateItems)
+        setUpCurrencyRateRepositoryWithErrorAfterSuccessfulReturn(mockCurrencyRateItems)
         // WHEN
         viewModel = createViewModel()
         val testObserver = viewModel.viewState.test()
@@ -155,10 +146,8 @@ class CurrencyCalculatorFragmentViewModelTest {
     @Test
     fun `Should show the loading indicator before the fetch currency rates service is successful`() {
         // GIVEN
-        val mockCurrencyRateList = mock<CurrencyRateList>()
         val mockCurrencyRateItems = mock<List<CurrencyCalculatorItem>>()
-        setUpCurrencyRateRepository(mockCurrencyRateList)
-        setUpCurrencyRatesItemListMapper(mockCurrencyRateItems)
+        setUpCurrencyRateRepository(mockCurrencyRateItems)
 
         // WHEN
         viewModel = createViewModel()
@@ -226,7 +215,6 @@ class CurrencyCalculatorFragmentViewModelTest {
     private fun createViewModel(): CurrencyCalculatorFragmentViewModel {
         return CurrencyCalculatorFragmentViewModel(
             ratesRepository,
-            currencyCalculatorItemListMapper,
             currencyCalculatorExceptionMapper
         )
     }
@@ -242,7 +230,7 @@ class CurrencyCalculatorFragmentViewModelTest {
     ) {
         var isNetworkErrorThrown = false
 
-        val currencyRateListFlow = flow<CurrencyRateList> {
+        val currencyRateListFlow = flow<List<CurrencyCalculatorItem>> {
             delay(initialDelayMillis)
 
             if (!isNetworkErrorThrown) {
@@ -268,7 +256,7 @@ class CurrencyCalculatorFragmentViewModelTest {
     }
 
     private fun setUpCurrencyRateRepositoryWithErrorAfterSuccessfulReturn(
-        currencyRateList: CurrencyRateList
+        currencyCalculatorItems: List<CurrencyCalculatorItem>
     ) {
         var isSuccessfulResponseEmitted = false
 
@@ -278,7 +266,7 @@ class CurrencyCalculatorFragmentViewModelTest {
                     delay(1000)
                     if (!isSuccessfulResponseEmitted) {
                         isSuccessfulResponseEmitted = true
-                        emit(currencyRateList)
+                        emit(currencyCalculatorItems)
                     } else {
                         throw Exception()
                     }
@@ -288,22 +276,13 @@ class CurrencyCalculatorFragmentViewModelTest {
     }
 
     private fun setUpCurrencyRateRepository(
-        mockCurrencyRateList: CurrencyRateList,
-        delayMillis: Long = 1000L
+        currencyCalculatorItems: List<CurrencyCalculatorItem>
     ) {
         whenever(ratesRepository.getRates()).thenReturn(
             flow {
-                delay(delayMillis)
-                emit(mockCurrencyRateList)
+                delay(1000L)
+                emit(currencyCalculatorItems)
             }
-        )
-    }
-
-    private fun setUpCurrencyRatesItemListMapper(
-        mockCurrencyCalculatorItems: List<CurrencyCalculatorItem>
-    ) {
-        whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(
-            mockCurrencyCalculatorItems
         )
     }
 }

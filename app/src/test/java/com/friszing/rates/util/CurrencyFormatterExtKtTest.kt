@@ -7,10 +7,19 @@ import org.junit.Test
 class CurrencyFormatterExtKtTest {
 
     @Test
-    fun `Should format the double value to the string`() {
+    fun `Should format double to 2 decimal string`() {
         // WHEN
-        val formattedValue = (100.0).formatCurrency()
+        val formattedValue = (100.20).formatCurrency()
 
-        assertThat(formattedValue).isEqualTo("100.00")
+        assertThat(formattedValue).isEqualTo("100.20")
     }
+
+    @Test
+    fun `Should use round up scaling`() {
+        // WHEN
+        val formattedValue = (100.199).formatCurrency()
+
+        assertThat(formattedValue).isEqualTo("100.20")
+    }
+
 }

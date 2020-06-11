@@ -82,7 +82,8 @@ class CurrencyCalculatorActivityTest {
     @Test
     fun should_change_the_base_currency_when_the_user_clicks_other_currency() = runBlockingTest {
         // GIVEN
-        val expectedCurrencyRateList = getCurrencyRateList("mock/latest_rates_usd.json")
+        val expectedCurrencyRateList =
+            getCurrencyRateList("mock/latest_rates_usd.json", 113.7)
         setUpCurrencyRateService("EUR", "mock/latest_rates_euro.json")
         setUpCurrencyRateService("USD", "mock/latest_rates_usd.json")
 
@@ -109,13 +110,16 @@ class CurrencyCalculatorActivityTest {
         whenever(service.fetchCurrencyRatesList("EUR")).doAnswer { throw IOException() }
     }
 
-    private fun getCurrencyRateList(path: String): List<CurrencyCalculatorItem> {
+    private fun getCurrencyRateList(
+        path: String,
+        calculationValue: Double = 100.0
+    ): List<CurrencyCalculatorItem> {
         val currencyListResponse = responseUtils.loadJson(
             path,
             CurrencyRateListResponse::class.java
         )
         val currencyRateList = responseMapper.map(currencyListResponse)
-        return currencyCalculatorItemListMapper.map(currencyRateList, 100.0)
+        return currencyCalculatorItemListMapper.map(currencyRateList, calculationValue)
     }
 
     private fun setUpTestDependencies() {

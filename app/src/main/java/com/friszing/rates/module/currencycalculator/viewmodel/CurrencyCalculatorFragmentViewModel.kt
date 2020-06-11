@@ -61,7 +61,7 @@ class CurrencyCalculatorFragmentViewModel(
     }
 
     fun onCurrencyItemClicked(currencyCalculatorItem: CurrencyCalculatorItem) =
-        ratesRepository.changeBaseCurrency(currencyCalculatorItem.currencyDetail.currencySymbol)
+        ratesRepository.changeBaseCurrency(currencyCalculatorItem)
 
     private fun shouldRetry(cause: Throwable) =
         cause is CurrencyCalculatorConnectionErrorException

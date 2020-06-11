@@ -5,7 +5,7 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyCalculatorRepository {
-    fun changeBaseCurrency(currency: String)
+    fun changeBaseCurrency(currencyCalculatorItem: CurrencyCalculatorItem)
 
     @Throws(CurrencyCalculatorException::class)
     fun getRates(): Flow<List<CurrencyCalculatorItem>>

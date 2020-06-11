@@ -60,9 +60,9 @@ class CurrencyCalculatorFragment(
             adapter = currencyRateItemsAdapter
         }
 
-        currencyRateItemsAdapter.onCurrencyCalculatorItemClickListener {
-            viewModel.onCurrencyItemClicked(it)
-        }
+        currencyRateItemsAdapter.onCurrencyCalculatorItemClickListener(
+            viewModel::onCurrencyItemClicked
+        )
 
         currencyRateItemsAdapter.onBaseCurrencyChanged {
             viewBinding.ratesRecyclerView.smoothScrollToPosition(0)

@@ -118,7 +118,7 @@ class CurrencyCalculatorFragmentTest {
         selectCurrencyItem(CURRENCY_USD_POSITION)
 
         // THEN
-        verify(ratesRepository).changeBaseCurrency(CURRENCY_USD)
+        verify(ratesRepository).changeBaseCurrency(CurrencyRateItems[CURRENCY_USD_POSITION])
     }
 
     @Test

@@ -30,7 +30,9 @@ class CurrencyCalculatorBaseCurrencyDiffUtilImplTest {
         // WHEN
         val baseCurrencyChanged = currencyCalculatorBaseCurrencyDiffUtil.isBaseCurrenciesDifferent(
             listOf(CurrencyCalculatorItem(CurrencyDetail("TRY", "", ""), 0.0)),
-            listOf(CurrencyCalculatorItem(CurrencyDetail("TRY", "", ""), 0.0))
+            listOf(
+                CurrencyCalculatorItem(CurrencyDetail("TRY", "", ""), 0.0)
+            )
         )
 
         // THEN

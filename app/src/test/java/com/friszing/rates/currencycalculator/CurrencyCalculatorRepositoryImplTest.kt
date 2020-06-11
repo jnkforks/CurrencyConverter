@@ -7,6 +7,7 @@ import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculator
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
+import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateListResponse
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
@@ -132,7 +133,16 @@ class CurrencyCalculatorRepositoryImplTest {
     @Test
     fun `Should change the base currency in the configuration when it is changed`() {
         // WHEN
-        repository.changeBaseCurrency("USD")
+        repository.changeBaseCurrency(
+            CurrencyCalculatorItem(
+                CurrencyDetail(
+                    "USD",
+                    "",
+                    ""
+                ),
+                100.0
+            )
+        )
 
         // THEN
         verify(repositoryConfiguration).baseCurrency = "USD"

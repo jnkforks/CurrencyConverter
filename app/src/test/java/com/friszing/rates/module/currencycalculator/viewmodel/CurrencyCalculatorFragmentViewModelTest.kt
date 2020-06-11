@@ -5,12 +5,10 @@ import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculator
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentViewState
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
-import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.util.TestCoroutineRule
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -192,24 +190,14 @@ class CurrencyCalculatorFragmentViewModelTest {
     @Test
     fun `Should change the base currency when the user clicks the currency item in the list`() {
         // GIVEN
-        val currencySymbol = "EUR"
-        val currencyCalculatorItem = setUpCurrencyCalculatorItem(currencySymbol)
+        val currencyCalculatorItem = mock<CurrencyCalculatorItem>()
         viewModel = createViewModel()
 
         // WHEN
         viewModel.onCurrencyItemClicked(currencyCalculatorItem)
 
         // THEN
-        verify(ratesRepository).changeBaseCurrency(currencySymbol)
-    }
-
-    private fun setUpCurrencyCalculatorItem(currencySymbol: String): CurrencyCalculatorItem {
-        val currencyDetail = mock<CurrencyDetail> {
-            on { it.currencySymbol } doReturn currencySymbol
-        }
-        return mock {
-            on { it.currencyDetail } doReturn currencyDetail
-        }
+        verify(ratesRepository).changeBaseCurrency(currencyCalculatorItem)
     }
 
     private fun createViewModel(): CurrencyCalculatorFragmentViewModel {

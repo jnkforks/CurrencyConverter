@@ -1,25 +1,63 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 android {
+    signingConfigs {
+        release {
+            storeFile file(KeyStore)
+            storePassword KeyStorePass
+            keyAlias KeyAlias
+            keyPassword AliasPass
+        }
+    }
+    packagingOptions {
+        exclude "**/attach_hotspot_windows.dll"
+        exclude "META-INF/licenses/**"
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+    }
+
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.friszing.rates"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+
+            shrinkResources true
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.txt',
+                    'proguard/moshi.txt',
+                    'proguard/glide.txt',
+                    'proguard/coroutines.txt'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -27,14 +65,91 @@ android {
 dependencies {
     def androidx_version = "1.1.0"
     def constraint_layout_version = "1.1.3"
+    def retrofit_version = "2.9.0"
+    def moshi_version = "1.9.2"
+    def kotlin_coroutine_version = "1.3.7"
+    def mockito_version = "2.2.0"
+    def truth_version = "1.0.1"
+    def lifecycle_version = "2.2.0"
+    def arch_version = "2.1.0"
+    def fragment_version = "1.2.4"
+    def nav_version = "2.3.0-beta01"
+    def dagger_version = "2.27"
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:$androidx_version"
+    implementation "androidx.core:core-ktx:1.3.0"
     implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+
+    testImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
+    testImplementation "androidx.arch.core:core-testing:$arch_version"
+    testImplementation 'junit:junit:4.13'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_version"
+    testImplementation "com.google.truth:truth:$truth_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version"
+
+    debugImplementation 'androidx.test.ext:junit:1.1.1'
+    debugImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+    debugImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_version"
+    debugImplementation "org.mockito:mockito-android:3.3.3"
+    debugImplementation "androidx.arch.core:core-testing:$arch_version"
+    debugImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version"
+    debugImplementation "androidx.navigation:navigation-testing:$nav_version"
+    debugImplementation "androidx.test.espresso:espresso-contrib:3.2.0"
+    debugImplementation 'com.github.fabioCollini.daggermock:daggermock:0.8.5'
+    debugImplementation 'com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5'
+    debugImplementation "androidx.test:core:1.2.0"
+    debugImplementation 'androidx.test:core-ktx:1.2.0'
+    debugImplementation 'androidx.test:rules:1.2.0'
+}
+
+
+ktlint {
+    version = "0.37.1"
+    debug = true
+    verbose = true
+    android = true
+    outputToConsole = true
+    outputColorName = "RED"
+    ignoreFailures = true
+    enableExperimentalRules = true
+    disabledRules = ["final-newline"]
+    reporters {
+        reporter "html"
+        reporter "checkstyle"
+    }
+    kotlinScriptAdditionalPaths {
+        include fileTree("scripts/")
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
 }

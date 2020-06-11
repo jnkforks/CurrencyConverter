@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rates_calculator__navigation"
+    app:startDestination="@id/currencyCalculatorFragment">
+    <fragment
+        android:id="@+id/currencyCalculatorFragment"
+        android:name="com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragment"
+        android:label="@string/rates_calculator__fragment_title"
+        tools:layout="@layout/fragment_currency_rates" />
+</navigation>

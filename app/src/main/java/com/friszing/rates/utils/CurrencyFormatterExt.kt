@@ -1,3 +1,3 @@
-package com.friszing.rates.util
+package com.friszing.rates.utils
 
 fun Double.formatCurrency() = "%.2f".format(this)

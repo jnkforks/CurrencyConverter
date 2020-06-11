@@ -123,6 +123,11 @@ dependencies {
     debugImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version"
     debugImplementation "androidx.navigation:navigation-testing:$nav_version"
     debugImplementation "androidx.test.espresso:espresso-contrib:3.2.0"
+    debugImplementation 'com.github.fabioCollini.daggermock:daggermock:0.8.5'
+    debugImplementation 'com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5'
+    debugImplementation "androidx.test:core:1.2.0"
+    debugImplementation 'androidx.test:core-ktx:1.2.0'
+    debugImplementation 'androidx.test:rules:1.2.0'
 }
 
 

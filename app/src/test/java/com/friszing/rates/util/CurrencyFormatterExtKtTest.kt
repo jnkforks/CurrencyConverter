@@ -1,5 +1,6 @@
 package com.friszing.rates.util
 
+import com.friszing.rates.utils.formatCurrency
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 

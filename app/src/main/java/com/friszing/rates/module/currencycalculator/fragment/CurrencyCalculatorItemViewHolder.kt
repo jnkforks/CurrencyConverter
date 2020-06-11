@@ -6,7 +6,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.friszing.rates.databinding.AdapterCurrencyItemBinding
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
-import com.friszing.rates.util.formatCurrency
+import com.friszing.rates.utils.formatCurrency
 
 class CurrencyCalculatorItemViewHolder(
     private val viewBinding: AdapterCurrencyItemBinding,

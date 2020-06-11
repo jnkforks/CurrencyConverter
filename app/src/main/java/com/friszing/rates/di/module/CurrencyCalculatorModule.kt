@@ -26,21 +26,21 @@ import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.Retrofit
 
 @Module
-class CurrencyCalculatorModule {
+open class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyService(retrofit: Retrofit) =
+    open fun provideCurrencyService(retrofit: Retrofit): CurrencyRateService =
         retrofit.create(CurrencyRateService::class.java)
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyRateListResponseMapper(): CurrencyRateListResponseMapper =
+    open fun provideCurrencyRateListResponseMapper(): CurrencyRateListResponseMapper =
         CurrencyRateListResponseMapperImpl()
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyRateRepositoryConfiguration(
+    open fun provideCurrencyRateRepositoryConfiguration(
         @Named("RepositoryConfig")
         sharedPreferences: SharedPreferences
     ): CurrencyCalculatorRepositoryConfiguration =
@@ -50,7 +50,7 @@ class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyRateRepository(
+    open fun provideCurrencyRateRepository(
         service: CurrencyRateService,
         responseMapper: CurrencyRateListResponseMapper,
         currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
@@ -65,24 +65,24 @@ class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyDetailProvider(): CurrencyDetailProvider =
+    open fun provideCurrencyDetailProvider(): CurrencyDetailProvider =
         CurrencyDetailProviderImpl()
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyCalculatorItemListMapper(
+    open fun provideCurrencyCalculatorItemListMapper(
         currencyDetailProvider: CurrencyDetailProvider
     ): CurrencyCalculatorItemListMapper =
         CurrencyCalculatorItemListMapperImpl(currencyDetailProvider)
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyCalculatorExceptionMapper(): CurrencyCalculatorExceptionMapper =
+    open fun provideCurrencyCalculatorExceptionMapper(): CurrencyCalculatorExceptionMapper =
         CurrencyCalculatorExceptionMapperImpl()
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyCalculatorFragmentViewModelFactory(
+    open fun provideCurrencyCalculatorFragmentViewModelFactory(
         ratesRepository: CurrencyCalculatorRepository,
         currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
     ) = CurrencyCalculatorFragmentViewModelFactory(
@@ -92,12 +92,12 @@ class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyCalculatorBaseCurrencyDiffUtil(): CurrencyCalculatorBaseCurrencyDiffUtil =
+    open fun provideBaseCurrencyDiffUtil(): CurrencyCalculatorBaseCurrencyDiffUtil =
         CurrencyCalculatorBaseCurrencyDiffUtilImpl()
 
     @CurrencyCalculatorScope
     @Provides
-    fun provideCurrencyCalculatorFragmentFactory(
+    open fun provideCurrencyCalculatorFragmentFactory(
         currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory,
         currencyCalculatorBaseCurrencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
     ) = CurrencyCalculatorFragmentFactory(

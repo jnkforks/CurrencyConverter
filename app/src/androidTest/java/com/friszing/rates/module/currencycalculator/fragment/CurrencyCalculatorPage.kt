@@ -10,11 +10,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.R
-import com.friszing.rates.util.formatCurrency
 import com.friszing.rates.utils.atPosition
+import com.friszing.rates.utils.formatCurrency
 
-internal fun currencyCalculatorPage(action: CurrencyCalculatorPage.() -> Unit) =
-    CurrencyCalculatorPage().action()
+internal fun currencyCalculatorPage(
+    action: CurrencyCalculatorPage.() -> Unit
+) = CurrencyCalculatorPage().action()
 
 internal class CurrencyCalculatorPage {
 

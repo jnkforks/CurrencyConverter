@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Text overlapping issue fixed.
 - Implement Calculation Value Case.
 - Implement Base Value change in Base Currency Change Case.
 - Activity Espresso Automation Test implemented.

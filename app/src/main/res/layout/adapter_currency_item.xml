@@ -66,6 +66,7 @@
             android:enabled="false"
             android:gravity="end|top"
             android:hint="@string/rates_calculator__default_amount"
+            android:imeOptions="actionDone"
             android:inputType="number"
             android:lineSpacingExtra="5sp"
             android:maxWidth="160dp"

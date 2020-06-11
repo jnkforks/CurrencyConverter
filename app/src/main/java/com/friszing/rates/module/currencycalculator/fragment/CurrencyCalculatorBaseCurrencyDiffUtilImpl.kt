@@ -7,6 +7,9 @@ class CurrencyCalculatorBaseCurrencyDiffUtilImpl : CurrencyCalculatorBaseCurrenc
     override fun isBaseCurrenciesDifferent(
         oldList: List<CurrencyCalculatorItem>,
         newList: List<CurrencyCalculatorItem>
-    ) = oldList.firstOrNull()?.currencyDetail?.currencySymbol !=
-            newList.firstOrNull()?.currencyDetail?.currencySymbol
+    ): Boolean {
+        val oldCurrencySymbol = oldList.firstOrNull()?.currencyDetail?.currencySymbol
+        val newCurrencySymbol = newList.firstOrNull()?.currencyDetail?.currencySymbol
+        return oldCurrencySymbol != newCurrencySymbol
+    }
 }

@@ -3,8 +3,8 @@ package com.friszing.rates.module.currencycalculator.fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.databinding.AdapterCurrencyItemBinding
+import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.util.formatCurrency
 

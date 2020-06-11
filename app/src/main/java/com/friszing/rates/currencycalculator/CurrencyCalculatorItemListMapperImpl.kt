@@ -2,8 +2,8 @@ package com.friszing.rates.currencycalculator
 
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyDetailProvider
-import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
+import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 
 class CurrencyCalculatorItemListMapperImpl(
     private val currencyDetailProvider: CurrencyDetailProvider

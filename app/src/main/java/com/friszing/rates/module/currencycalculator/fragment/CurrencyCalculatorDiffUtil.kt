@@ -6,15 +6,16 @@ import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorI
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorItemsAdapter.Companion.KEY_VALUE
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 
-
 class CurrencyCalculatorDiffUtil(
     private val oldItems: List<CurrencyCalculatorItem>,
     private val newsItems: List<CurrencyCalculatorItem>
 ) : DiffUtil.Callback() {
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        oldItems[oldItemPosition].currencyDetail.currencySymbol ==
-                newsItems[newItemPosition].currencyDetail.currencySymbol
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldCurrencyDetail = oldItems[oldItemPosition].currencyDetail
+        val newCurrencyDetail = newsItems[newItemPosition].currencyDetail
+        return oldCurrencyDetail.currencySymbol == newCurrencyDetail.currencySymbol
+    }
 
     override fun getOldListSize() = oldItems.size
 

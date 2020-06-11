@@ -134,7 +134,6 @@ ktlint {
     outputColorName = "RED"
     ignoreFailures = true
     enableExperimentalRules = true
-    additionalEditorconfigFile = file("/some/additional/.editorconfig")
     disabledRules = ["final-newline"]
     reporters {
         reporter "html"

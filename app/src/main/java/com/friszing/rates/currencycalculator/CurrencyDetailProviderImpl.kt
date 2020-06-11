@@ -1,9 +1,11 @@
-package com.friszing.rates.module.currencycalculator.mapper
+package com.friszing.rates.currencycalculator
 
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyDetailProvider
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import java.util.Currency
 
-class CurrencyDetailProviderImpl : CurrencyDetailProvider {
+class CurrencyDetailProviderImpl :
+    CurrencyDetailProvider {
 
     private val currencyCountryMap = mapOf(
         "EUR" to "https://flagpedia.net/data/org/w2560/eu.png",

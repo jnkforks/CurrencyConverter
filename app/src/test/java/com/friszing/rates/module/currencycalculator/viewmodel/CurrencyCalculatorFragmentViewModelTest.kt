@@ -109,7 +109,7 @@ class CurrencyCalculatorFragmentViewModelTest {
     }
 
     @Test
-    fun `Should retry fetching the currency rates when the currency rates fetching fails because of the connection error exception`() {
+    fun `Should retry fetching the currency rates when there is connection error`() {
         // GIVEN
         val errorId = -1
         setUpCurrencyRateRepositoryForRetryCase()
@@ -125,7 +125,7 @@ class CurrencyCalculatorFragmentViewModelTest {
     }
 
     @Test
-    fun `Should not retry fetching the currency rates when the thrown exception is not the connection error exception`() {
+    fun `Should stop getting currency rates when the error is not about connection`() {
         // GIVEN
         val errorId = -1
         setUpCurrencyRateRepositoryWithError(NullPointerException())
@@ -144,7 +144,7 @@ class CurrencyCalculatorFragmentViewModelTest {
     }
 
     @Test
-    fun `Should show the loading indicator before the fetch currency rates service is successful`() {
+    fun `Should show the loading indicator before starting to get currency rates`() {
         // GIVEN
         val mockCurrencyRateItems = mock<List<CurrencyCalculatorItem>>()
         setUpCurrencyRateRepository(mockCurrencyRateItems)

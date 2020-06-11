@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.databinding.AdapterCurrencyItemBinding
+import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 
 typealias OnCurrencyCalculatorItemClick = (CurrencyCalculatorItem) -> Unit

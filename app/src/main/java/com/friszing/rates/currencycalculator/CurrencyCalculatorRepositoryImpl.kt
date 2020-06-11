@@ -8,12 +8,12 @@ import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorIte
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
+import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.io.IOException
 
 class CurrencyCalculatorRepositoryImpl(
     private val service: CurrencyRateService,

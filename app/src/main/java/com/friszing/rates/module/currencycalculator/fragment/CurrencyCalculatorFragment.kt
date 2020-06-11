@@ -18,12 +18,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.Snackbar
 
 class CurrencyCalculatorFragment(
-    private val currencyCalculatorFragmentViewModelFactory: CurrencyCalculatorFragmentViewModelFactory,
+    private val viewModelFactory: CurrencyCalculatorFragmentViewModelFactory,
     currencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
 ) : Fragment() {
 
-    private val currencyCalculatorFragmentViewModel: CurrencyCalculatorFragmentViewModel by viewModels(
-        factoryProducer = { currencyCalculatorFragmentViewModelFactory }
+    private val viewModel: CurrencyCalculatorFragmentViewModel by viewModels(
+        factoryProducer = { viewModelFactory }
     )
 
     private lateinit var viewBinding: FragmentCurrencyRatesBinding
@@ -49,7 +49,7 @@ class CurrencyCalculatorFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        currencyCalculatorFragmentViewModel.viewState.observe(
+        viewModel.viewState.observe(
             viewLifecycleOwner,
             Observer(::onViewStateChange)
         )
@@ -61,7 +61,7 @@ class CurrencyCalculatorFragment(
         }
 
         currencyRateItemsAdapter.onCurrencyCalculatorItemClickListener {
-            currencyCalculatorFragmentViewModel.onCurrencyItemClicked(it)
+            viewModel.onCurrencyItemClicked(it)
         }
 
         currencyRateItemsAdapter.onBaseCurrencyChanged {

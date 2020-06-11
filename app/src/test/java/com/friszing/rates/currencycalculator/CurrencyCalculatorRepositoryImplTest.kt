@@ -24,13 +24,13 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
-import org.junit.runner.RunWith
 import org.junit.Test
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -87,7 +87,7 @@ class CurrencyCalculatorRepositoryImplTest {
         }
 
     @Test
-    fun `Should fetch the currency rate list from the currency rate service with specified period`() =
+    fun `Should get the currency rate list with specified period`() =
         runBlockingTest {
             launch {
                 // WHEN
@@ -101,7 +101,7 @@ class CurrencyCalculatorRepositoryImplTest {
         }
 
     @Test
-    fun `Should fetch the currency rate list from the currency rate service with the base currency`() =
+    fun `Should get the currency rate list with the base currency`() =
         runBlockingTest {
             launch {
                 // WHEN
@@ -183,7 +183,7 @@ class CurrencyCalculatorRepositoryImplTest {
         }
 
     @Test(expected = CurrencyCalculatorConnectionErrorException::class)
-    fun `Should throw the network error exception when the io exception is thrown by the service`() =
+    fun `Should throw the connection error exception when the network is not connected`() =
         runBlockingTest {
             // GIVEN
             setUpCurrencyRateServiceWithException(IOException())

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+
+### Ararat[1.0.0] - 2020-06-12
 - App Name and Title change.
 - Text overlapping issue fixed.
 - Implement Calculation Value Case.

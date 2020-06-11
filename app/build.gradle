@@ -122,6 +122,7 @@ dependencies {
     debugImplementation "androidx.arch.core:core-testing:$arch_version"
     debugImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version"
     debugImplementation "androidx.navigation:navigation-testing:$nav_version"
+    debugImplementation "androidx.test.espresso:espresso-contrib:3.2.0"
 }
 
 

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Missing Currency Selection Fragment Test implemented.
 - Increase code coverage of CurrencyCalculatorRepositoryConfigurationImpl
 - Remove mapping responsibility to Repository
 - Ktlint integrated

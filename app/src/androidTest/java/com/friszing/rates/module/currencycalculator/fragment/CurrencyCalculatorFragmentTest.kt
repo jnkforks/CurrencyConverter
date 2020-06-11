@@ -10,6 +10,7 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -79,7 +80,7 @@ class CurrencyCalculatorFragmentTest {
             // GIVEN
             setUpCurrencyRateRepository(
                 CurrencyRateItems,
-                2000
+                2000L
             )
 
             // WHEN
@@ -90,7 +91,7 @@ class CurrencyCalculatorFragmentTest {
         }
 
     @Test
-    fun should_show_the_snackbar_when_the_fetching_currency_rates_fails() {
+    fun should_show_the_snackbar_when_the_fetching_currency_rates_fails() =
         currencyCalculatorPage {
             // GIVEN
             setUpCurrencyRateRepositoryWithException(
@@ -106,6 +107,18 @@ class CurrencyCalculatorFragmentTest {
             // THEN
             isSnackbarVisible()
         }
+
+    @Test
+    fun should_change_fetched_currency_when_the_base_item_is_changed() = currencyCalculatorPage {
+        // GIVEN
+        setUpCurrencyRateRepository(CurrencyRateItems)
+        launchFragment()
+
+        // WHEN
+        selectCurrencyItem(CURRENCY_USD_POSITION)
+
+        // THEN
+        verify(ratesRepository).changeBaseCurrency(CURRENCY_USD)
     }
 
     private fun setUpCurrencyRatesExceptionMapper(
@@ -157,7 +170,8 @@ class CurrencyCalculatorFragmentTest {
 
     private companion object {
         private const val BASE_CURRENCY = "EUR"
-        private const val CURRENCY = "USD"
+        private const val CURRENCY_USD = "USD"
+        private const val CURRENCY_USD_POSITION = 1
 
         private val CurrencyRateItems = listOf(
             CurrencyCalculatorItem(
@@ -170,7 +184,7 @@ class CurrencyCalculatorFragmentTest {
             ),
             CurrencyCalculatorItem(
                 CurrencyDetail(
-                    CURRENCY,
+                    CURRENCY_USD,
                     "US Dollars",
                     "https://flagpedia.net/data/flags/w2560/us.png"
                 ),

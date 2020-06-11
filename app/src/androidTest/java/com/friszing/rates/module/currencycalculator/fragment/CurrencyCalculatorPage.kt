@@ -2,6 +2,8 @@ package com.friszing.rates.module.currencycalculator.fragment
 
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -30,6 +32,15 @@ internal class CurrencyCalculatorPage {
 
     fun isSnackbarVisible() = also {
         SNACKBAR.check(matches(isDisplayed()))
+    }
+
+    fun selectCurrencyItem(position: Int) = also {
+        CURRENCY_RATES_LIST.perform(
+            actionOnItemAtPosition<CurrencyCalculatorItemViewHolder>(
+                position,
+                click()
+            )
+        )
     }
 
     fun checkCurrencyRateItems(currencyCalculatorItems: List<CurrencyCalculatorItem>) =

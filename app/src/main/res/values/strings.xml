@@ -8,7 +8,7 @@
     <string name="rates_calculator__parsing_error_message">@string/rates_calculator__general_error_message</string>
     <string name="rates_calculator__network_error_message">Unable to connect. Please check your network connection.</string>
 
-    <string name="rates_calculator__default_amount">00</string>
+    <string name="rates_calculator__default_amount">0</string>
     <string name="rates_calculator__default_content_description">Currency Picture</string>
 
 </resources>

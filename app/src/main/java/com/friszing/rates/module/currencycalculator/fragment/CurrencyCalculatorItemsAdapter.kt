@@ -11,6 +11,7 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 
 typealias OnCurrencyCalculatorItemClick = (CurrencyCalculatorItem) -> Unit
 typealias OnBaseCurrencyChanged = () -> Unit
+typealias OnBaseCalculationValueChanged = (CurrencyCalculatorItem) -> Unit
 
 class CurrencyCalculatorItemsAdapter(
     private val baseCurrencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
@@ -23,6 +24,7 @@ class CurrencyCalculatorItemsAdapter(
 
     private var currencyCalculatorItemClick: OnCurrencyCalculatorItemClick? = null
     private var baseCurrencyChanged: OnBaseCurrencyChanged? = null
+    private var baseCalculationValueChanged: OnBaseCalculationValueChanged? = null
     private val currencyRateItems = mutableListOf<CurrencyCalculatorItem>()
 
     override fun onCreateViewHolder(
@@ -55,6 +57,8 @@ class CurrencyCalculatorItemsAdapter(
         val bundle =
             payloads.first() as? Bundle ?: return super.onBindViewHolder(holder, position, payloads)
 
+        if (position == 0) return
+
         bundle.getParcelable<CurrencyDetail>(KEY_CURRENCY)?.let(holder::bindCurrency)
 
         if (bundle.containsKey(KEY_VALUE)) {
@@ -65,10 +69,15 @@ class CurrencyCalculatorItemsAdapter(
     override fun onBindViewHolder(holder: CurrencyCalculatorItemViewHolder, position: Int) {
         val currencyRateItem = currencyRateItems[position]
         holder.bind(currencyRateItem)
+
         holder.itemView.setOnClickListener {
             currencyCalculatorItemClick?.invoke(
-                currencyRateItem
+                currencyRateItems[position]
             )
+        }
+
+        holder.setOnAmountChanged {
+            baseCalculationValueChanged?.invoke(currencyRateItems[position].copy(value = it))
         }
     }
 
@@ -80,6 +89,10 @@ class CurrencyCalculatorItemsAdapter(
 
     fun onBaseCurrencyChanged(baseCurrencyChanged: OnBaseCurrencyChanged) {
         this.baseCurrencyChanged = baseCurrencyChanged
+    }
+
+    fun onBaseCalculationValueChanged(baseCalculationValueChanged: OnBaseCalculationValueChanged) {
+        this.baseCalculationValueChanged = baseCalculationValueChanged
     }
 
     fun setCurrencyRateItems(newList: List<CurrencyCalculatorItem>) {

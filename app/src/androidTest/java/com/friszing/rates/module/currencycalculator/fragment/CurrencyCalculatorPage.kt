@@ -5,6 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
@@ -12,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.R
+import com.friszing.rates.utils.actionOnChild
 import com.friszing.rates.utils.atPosition
 import com.friszing.rates.utils.childOfViewAtPositionWithMatcher
 import com.friszing.rates.utils.formatCurrency
@@ -52,9 +54,46 @@ internal class CurrencyCalculatorPage {
         )
     }
 
-    fun checkCurrencyRateItems(currencyCalculatorItems: List<CurrencyCalculatorItem>) =
+    fun changeCalculationValue(value: Double) = also {
+        CURRENCY_RATES_LIST.perform(
+            scrollToPosition<CurrencyCalculatorItemViewHolder>(
+                0
+            )
+        )
+
+        CURRENCY_RATES_LIST.perform(
+            actionOnChild(
+                replaceText(value.formatCurrency()),
+                R.id.amount
+            )
+        )
+    }
+
+    fun changeCalculationValueWithEmptyText() = also {
+        CURRENCY_RATES_LIST.perform(
+            scrollToPosition<CurrencyCalculatorItemViewHolder>(
+                0
+            )
+        )
+
+        CURRENCY_RATES_LIST.perform(
+            actionOnChild(
+                replaceText(""),
+                R.id.amount
+            )
+        )
+    }
+
+    fun checkAllCurrencyRateItems(currencyCalculatorItems: List<CurrencyCalculatorItem>) =
         currencyCalculatorItems.forEachIndexed { index, currencyRateItem ->
             checkListItem(index, currencyRateItem)
+        }
+
+    fun checkCalculatedCurrencyRateItems(currencyCalculatorItems: List<CurrencyCalculatorItem>) =
+        currencyCalculatorItems.forEachIndexed { index, currencyRateItem ->
+            if (index > 0) {
+                checkListItem(index, currencyRateItem)
+            }
         }
 
     private fun checkListItem(index: Int, currencyCalculatorItem: CurrencyCalculatorItem) = also {

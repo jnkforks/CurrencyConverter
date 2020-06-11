@@ -21,5 +21,4 @@ class CurrencyFormatterExtKtTest {
 
         assertThat(formattedValue).isEqualTo("100.20")
     }
-
 }

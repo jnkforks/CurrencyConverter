@@ -60,7 +60,7 @@ class CurrencyCalculatorActivityTest {
         activityRule.launchActivity(null)
 
         currencyCalculatorPage {
-            checkCurrencyRateItems(expectedCurrencyRateList)
+            checkAllCurrencyRateItems(expectedCurrencyRateList)
         }
     }
 
@@ -87,14 +87,56 @@ class CurrencyCalculatorActivityTest {
         setUpCurrencyRateService("EUR", "mock/latest_rates_euro.json")
         setUpCurrencyRateService("USD", "mock/latest_rates_usd.json")
 
-        // WHEN
         activityRule.launchActivity(null)
         currencyCalculatorPage {
+            // WHEN
             selectCurrencyItem(1)
             Thread.sleep(2000L)
-            checkCurrencyRateItems(expectedCurrencyRateList)
+
+            // THEN
+            checkAllCurrencyRateItems(expectedCurrencyRateList)
         }
     }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun should_change_the_currency_calculation_values_when_the_user_changes_the_base_currency_value() =
+        runBlockingTest {
+            // GIVEN
+            val expectedCurrencyRateList =
+                getCurrencyRateList("mock/latest_rates_euro.json", 200.0)
+            setUpCurrencyRateService("EUR", "mock/latest_rates_euro.json")
+
+            activityRule.launchActivity(null)
+            currencyCalculatorPage {
+                // WHEN
+                changeCalculationValue(200.0)
+                Thread.sleep(2000L)
+
+                // THEN
+                checkAllCurrencyRateItems(expectedCurrencyRateList)
+            }
+        }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun should_change_all_currency_values_to_zero_when_the_calculation_value_is_empty() =
+        runBlockingTest {
+            // GIVEN
+            val expectedCurrencyRateList =
+                getCurrencyRateList("mock/latest_rates_euro.json", 0.0)
+            setUpCurrencyRateService("EUR", "mock/latest_rates_euro.json")
+
+            activityRule.launchActivity(null)
+            currencyCalculatorPage {
+                // WHEN
+                changeCalculationValueWithEmptyText()
+                Thread.sleep(2000L)
+
+                // THEN
+                checkCalculatedCurrencyRateItems(expectedCurrencyRateList)
+            }
+        }
 
     private suspend fun setUpCurrencyRateService(currency: String, path: String) {
         val currencyListResponse = responseUtils.loadJson(

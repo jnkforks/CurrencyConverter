@@ -71,7 +71,7 @@ class CurrencyCalculatorFragmentTest {
             launchFragment()
 
             // THEN
-            checkCurrencyRateItems(CurrencyRateItems)
+            checkAllCurrencyRateItems(CurrencyRateItems)
         }
 
     @Test

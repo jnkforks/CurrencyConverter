@@ -67,6 +67,10 @@ class CurrencyCalculatorFragment(
         currencyRateItemsAdapter.onBaseCurrencyChanged {
             viewBinding.ratesRecyclerView.smoothScrollToPosition(0)
         }
+
+        currencyRateItemsAdapter.onBaseCalculationValueChanged(
+            viewModel::onCurrencyCalculationValueChanged
+        )
     }
 
     private fun onViewStateChange(viewState: CurrencyCalculatorFragmentViewState) {

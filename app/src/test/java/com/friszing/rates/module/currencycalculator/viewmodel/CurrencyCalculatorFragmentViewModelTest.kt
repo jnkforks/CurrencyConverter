@@ -200,6 +200,19 @@ class CurrencyCalculatorFragmentViewModelTest {
         verify(ratesRepository).changeBaseCurrency(currencyCalculatorItem)
     }
 
+    @Test
+    fun `Should change the base currency when the user changes the calculation value`() {
+        // GIVEN
+        val currencyCalculatorItem = mock<CurrencyCalculatorItem>()
+        viewModel = createViewModel()
+
+        // WHEN
+        viewModel.onCurrencyCalculationValueChanged(currencyCalculatorItem)
+
+        // THEN
+        verify(ratesRepository).changeBaseCurrency(currencyCalculatorItem)
+    }
+
     private fun createViewModel(): CurrencyCalculatorFragmentViewModel {
         return CurrencyCalculatorFragmentViewModel(
             ratesRepository,

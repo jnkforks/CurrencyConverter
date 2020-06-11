@@ -29,7 +29,8 @@ class CurrencyCalculatorActivity : AppCompatActivity() {
             .applicationComponent
             .currencyCalculatorComponentBuilder()
             .currencyCalculatorModule(CurrencyCalculatorModule())
-            .build().inject(this)
+            .build()
+            .inject(this)
     }
 
     private fun initializeToolbar() {

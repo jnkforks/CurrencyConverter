@@ -121,6 +121,32 @@ class CurrencyCalculatorFragmentTest {
         verify(ratesRepository).changeBaseCurrency(CURRENCY_USD)
     }
 
+    @Test
+    fun should_check_the_input_of_the_base_currency_enabled() = currencyCalculatorPage {
+        // GIVEN
+        setUpCurrencyRateRepository(CurrencyRateItems)
+        launchFragment()
+
+        // WHEN
+        selectCurrencyItem(CURRENCY_USD_POSITION)
+
+        // THEN
+        checkCurrencyInputEnabled(0, true)
+    }
+
+    @Test
+    fun should_check_the_input_of_the_other_currencies_disabled() = currencyCalculatorPage {
+        // GIVEN
+        setUpCurrencyRateRepository(CurrencyRateItems)
+        launchFragment()
+
+        // WHEN
+        selectCurrencyItem(CURRENCY_USD_POSITION)
+
+        // THEN
+        checkCurrencyInputEnabled(1, false)
+    }
+
     private fun setUpCurrencyRatesExceptionMapper(
         @StringRes value: Int
     ) {

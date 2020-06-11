@@ -1,10 +1,10 @@
 package com.friszing.rates.utils
 
-import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.squareup.moshi.Moshi
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
+import java.io.IOException
 
 class ResponseUtils {
 

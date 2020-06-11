@@ -22,7 +22,7 @@ open class StorageModule {
             MODE_PRIVATE
         )
 
-    private companion object {
-        private const val CONFIGURATION_PREF = "CONFIGURATION_PREF"
+    companion object {
+        const val CONFIGURATION_PREF = "CONFIGURATION_PREF"
     }
 }

@@ -20,14 +20,14 @@ class CurrencyCalculatorRepositoryConfigurationImpl(
                 putString(KEY_CURRENCY, value)
             }
         }
-    override var baseCurrencyValue: Double
+    override var baseCalculationValue: Double
         get() = configurationPreferences.getFloat(
-            KEY_CURRENCY_VALUE,
+            KEY_CALCULATION,
             CALCULATION_BASE_CURRENCY_DEFAULT_VALUE
         ).toDouble()
         set(value) {
             configurationPreferences.edit {
-                putFloat(KEY_CURRENCY_VALUE, value.toFloat())
+                putFloat(KEY_CALCULATION, value.toFloat())
             }
         }
 
@@ -36,7 +36,7 @@ class CurrencyCalculatorRepositoryConfigurationImpl(
 
     companion object {
         const val KEY_CURRENCY = "KEY_CURRENCY"
-        const val KEY_CURRENCY_VALUE = "KEY_CURRENCY_VALUE"
+        const val KEY_CALCULATION = "KEY_CALCULATION"
         const val DEFAULT_CURRENCY = "EUR"
         private const val CALCULATION_BASE_CURRENCY_DEFAULT_VALUE = 100.0f
     }

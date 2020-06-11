@@ -40,7 +40,7 @@ class CurrencyCalculatorRepositoryImpl(
                 emit(
                     currencyCalculatorItemListMapper.map(
                         currencyRateList,
-                        repositoryConfiguration.baseCurrencyValue
+                        repositoryConfiguration.baseCalculationValue
                     )
                 )
                 delay(repositoryConfiguration.requestIntervalMillis)

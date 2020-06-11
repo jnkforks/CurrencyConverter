@@ -50,6 +50,40 @@ class CurrencyCalculatorRepositoryConfigurationImplTest {
     }
 
     @Test
+    fun `Should provide the base calculation from the shared preferences`() {
+        // GIVEN
+        val expectedCalculationValue = 100.0
+        whenever(
+            sharedPreferences.getFloat(
+                any(),
+                any()
+            )
+        ).thenReturn(expectedCalculationValue.toFloat())
+
+        // WHEN
+        val baseCalculationValue = configuration.baseCalculationValue
+
+        // THEN
+        assertThat(baseCalculationValue).isEqualTo(expectedCalculationValue)
+    }
+
+    @Test
+    fun `Should save the base calculation value to the shared preferences`() {
+        // GIVEN
+        val editor = mock<SharedPreferences.Editor>()
+        whenever(sharedPreferences.edit()).thenReturn(editor)
+        // WHEN
+        configuration.baseCalculationValue = 100.0
+
+        // THEN
+        verify(editor).putFloat(
+            CurrencyCalculatorRepositoryConfigurationImpl.KEY_CALCULATION,
+            100.0.toFloat()
+        )
+        verify(editor).apply()
+    }
+
+    @Test
     fun `Should provide the request interval millis as 1000ms`() {
         // THEN
         assertThat(configuration.requestIntervalMillis).isEqualTo(1000L)

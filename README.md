@@ -34,5 +34,5 @@ The software components in the project are testable and developed by using SOLID
    - [LeakCanary](https://github.com/square/leakcanary)
    
 # TODO
-- [] Explain App Architecture
-- [] Use last received co efficients and use them in Offline Case
+- [ ] Explain App Architecture
+- [ ] Use last received co efficients and use them in Offline Case

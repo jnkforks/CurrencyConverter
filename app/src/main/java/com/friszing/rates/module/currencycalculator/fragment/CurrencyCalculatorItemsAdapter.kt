@@ -3,8 +3,10 @@ package com.friszing.rates.module.currencycalculator.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.friszing.rates.databinding.AdapterCurrencyBaseItemBinding
 import com.friszing.rates.databinding.AdapterCurrencyItemBinding
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
@@ -16,7 +18,7 @@ typealias OnBaseCalculationValueChanged = (CurrencyCalculatorItem) -> Unit
 class CurrencyCalculatorItemsAdapter(
     private val baseCurrencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
 ) :
-    Adapter<CurrencyCalculatorItemViewHolder>() {
+    Adapter<CurrencyCalculatorItemViewHolder<TextView>>() {
 
     init {
         setHasStableIds(true)
@@ -27,28 +29,21 @@ class CurrencyCalculatorItemsAdapter(
     private var baseCalculationValueChanged: OnBaseCalculationValueChanged? = null
     private val currencyRateItems = mutableListOf<CurrencyCalculatorItem>()
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): CurrencyCalculatorItemViewHolder {
-        val viewBinding =
-            AdapterCurrencyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CurrencyCalculatorItemViewHolder(
-            viewBinding,
-            viewType == BASE_CURRENCY_VIEW_TYPE
-        )
-    }
-
     override fun getItemViewType(position: Int) =
-        if (position == 0) BASE_CURRENCY_VIEW_TYPE else OTHER_CURRENCY_VIEW_TYPE
+        if (position == 0) BASE_CURRENCY_VIEW_TYPE
+        else OTHER_CURRENCY_VIEW_TYPE
 
-    override fun getItemId(position: Int): Long =
-        currencyRateItems[position].currencyDetail.currencySymbol.hashCode().toLong()
+    override fun getItemId(position: Int) =
+        currencyRateItems[position]
+            .currencyDetail
+            .currencySymbol
+            .hashCode()
+            .toLong()
 
-    override fun getItemCount(): Int = currencyRateItems.size
+    override fun getItemCount() = currencyRateItems.size
 
     override fun onBindViewHolder(
-        holder: CurrencyCalculatorItemViewHolder,
+        holder: CurrencyCalculatorItemViewHolder<TextView>,
         position: Int,
         payloads: MutableList<Any>
     ) {
@@ -59,27 +54,18 @@ class CurrencyCalculatorItemsAdapter(
 
         if (position == 0) return
 
-        bundle.getParcelable<CurrencyDetail>(KEY_CURRENCY)?.let(holder::bindCurrency)
+        bundle.getParcelable<CurrencyDetail>(KEY_CURRENCY)
+            ?.let(holder::bindCurrencyDetail)
 
         if (bundle.containsKey(KEY_VALUE)) {
             holder.bindAmount(bundle.getDouble(KEY_VALUE))
         }
     }
 
-    override fun onBindViewHolder(holder: CurrencyCalculatorItemViewHolder, position: Int) {
-        val currencyRateItem = currencyRateItems[position]
-        holder.bind(currencyRateItem)
-
-        holder.itemView.setOnClickListener {
-            currencyCalculatorItemClick?.invoke(
-                currencyRateItems[position]
-            )
-        }
-
-        holder.setOnAmountChanged {
-            baseCalculationValueChanged?.invoke(currencyRateItems[position].copy(value = it))
-        }
-    }
+    override fun onBindViewHolder(
+        holder: CurrencyCalculatorItemViewHolder<TextView>,
+        position: Int
+    ) = holder.bind(currencyRateItems[position])
 
     fun onCurrencyCalculatorItemClickListener(
         currencyCalculatorItemClick: OnCurrencyCalculatorItemClick
@@ -120,5 +106,36 @@ class CurrencyCalculatorItemsAdapter(
         const val KEY_CURRENCY = "KEY_CURRENCY"
         const val BASE_CURRENCY_VIEW_TYPE = 1
         const val OTHER_CURRENCY_VIEW_TYPE = 2
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ) = if (viewType == BASE_CURRENCY_VIEW_TYPE) {
+        CurrencyCalculatorBaseItemViewHolder(
+            AdapterCurrencyBaseItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ).apply {
+            setOnAmountChanged {
+                baseCalculationValueChanged?.invoke(currencyRateItems[position].copy(value = it))
+            }
+        }
+    } else {
+        CurrencyCalculatorCalculatedItemViewHolder(
+            AdapterCurrencyItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ).apply {
+            itemView.setOnClickListener {
+                currencyCalculatorItemClick?.invoke(
+                    currencyRateItems[position]
+                )
+            }
+        }
     }
 }

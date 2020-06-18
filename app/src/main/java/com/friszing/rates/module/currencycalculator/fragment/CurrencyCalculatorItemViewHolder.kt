@@ -1,60 +1,42 @@
 package com.friszing.rates.module.currencycalculator.fragment
 
-import androidx.core.widget.doAfterTextChanged
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.friszing.rates.databinding.AdapterCurrencyItemBinding
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.utils.formatCurrency
 
-typealias OnAmountChanged = (Double) -> Unit
 
-class CurrencyCalculatorItemViewHolder(
-    private val viewBinding: AdapterCurrencyItemBinding,
-    private val isBaseCurrencyHolder: Boolean
+abstract class CurrencyCalculatorItemViewHolder<out T : TextView>(
+    view: View
+) : RecyclerView.ViewHolder(view) {
 
-) : RecyclerView.ViewHolder(viewBinding.root) {
+    abstract val title: TextView
 
-    private var onAmountChanged: OnAmountChanged? = null
+    abstract val description: TextView
 
-    init {
-        configureAmountView()
-    }
+    abstract val currencyFlag: ImageView
+
+    abstract val amount: T
 
     fun bind(currencyCalculatorItem: CurrencyCalculatorItem) {
-        bindCurrency(currencyCalculatorItem.currencyDetail)
+        bindCurrencyDetail(currencyCalculatorItem.currencyDetail)
         bindAmount(currencyCalculatorItem.value)
     }
 
-    fun bindCurrency(country: CurrencyDetail) {
-        viewBinding.title.text = country.currencySymbol
-        viewBinding.description.text = country.currencyDescription
-        Glide.with(viewBinding.root)
-            .load(country.currencyFlagUrl)
+    fun bindCurrencyDetail(currencyDetail: CurrencyDetail) {
+        title.text = currencyDetail.currencySymbol
+        description.text = currencyDetail.currencyDescription
+        Glide.with(itemView)
+            .load(currencyDetail.currencyFlagUrl)
             .apply(RequestOptions().circleCrop())
-            .into(viewBinding.currencyFlag)
-        viewBinding.currencyFlag.contentDescription = country.currencyDescription
+            .into(currencyFlag)
+        currencyFlag.contentDescription = currencyDetail.currencyDescription
     }
 
-    fun setOnAmountChanged(onAmountChanged: OnAmountChanged) {
-        this.onAmountChanged = onAmountChanged
-    }
-
-    fun bindAmount(value: Double) = viewBinding.amount.setText(value.formatCurrency())
-
-    private fun configureAmountView() {
-        viewBinding.amount.apply {
-            isEnabled = isBaseCurrencyHolder
-            if (isEnabled) {
-                doAfterTextChanged {
-                    onAmountChanged?.invoke(
-                        it?.toString()?.replace(',', '.')
-                            ?.toDoubleOrNull() ?: 0.0
-                    )
-                }
-            }
-        }
-    }
+    fun bindAmount(value: Double) = amount.setText(value.formatCurrency())
 }

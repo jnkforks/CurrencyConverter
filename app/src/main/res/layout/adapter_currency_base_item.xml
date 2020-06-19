@@ -77,7 +77,7 @@
             android:gravity="end|top"
             android:hint="@string/rates_calculator__default_amount"
             android:imeOptions="flagNoExtractUi|actionDone"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:lineSpacingExtra="5sp"
             android:maxWidth="160dp"
             android:maxLength="18"

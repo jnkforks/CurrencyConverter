@@ -4,6 +4,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
 import com.friszing.rates.databinding.AdapterCurrencyBaseItemBinding
+import com.friszing.rates.utils.closeKeyBoard
 import com.google.android.material.textfield.TextInputEditText
 
 typealias OnAmountChanged = (Double) -> Unit
@@ -29,6 +30,9 @@ class CurrencyCalculatorBaseItemViewHolder(
                 it?.toString()?.replace(',', '.')
                     ?.toDoubleOrNull() ?: 0.0
             )
+        }
+        amount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) v.closeKeyBoard()
         }
     }
 

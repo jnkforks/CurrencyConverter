@@ -1,5 +1,6 @@
 package com.friszing.rates.module.currencycalculator.fragment
 
+import android.widget.TextView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -42,12 +43,12 @@ internal class CurrencyCalculatorPage {
 
     fun selectCurrencyItem(position: Int) = also {
         CURRENCY_RATES_LIST.perform(
-            scrollToPosition<CurrencyCalculatorItemViewHolder>(
+            scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
                 position
             )
         )
         CURRENCY_RATES_LIST.perform(
-            actionOnItemAtPosition<CurrencyCalculatorItemViewHolder>(
+            actionOnItemAtPosition<CurrencyCalculatorItemViewHolder<TextView>>(
                 position,
                 click()
             )
@@ -56,7 +57,7 @@ internal class CurrencyCalculatorPage {
 
     fun changeCalculationValue(value: Double) = also {
         CURRENCY_RATES_LIST.perform(
-            scrollToPosition<CurrencyCalculatorItemViewHolder>(
+            scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
                 0
             )
         )
@@ -71,7 +72,7 @@ internal class CurrencyCalculatorPage {
 
     fun changeCalculationValueWithEmptyText() = also {
         CURRENCY_RATES_LIST.perform(
-            scrollToPosition<CurrencyCalculatorItemViewHolder>(
+            scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
                 0
             )
         )
@@ -98,7 +99,7 @@ internal class CurrencyCalculatorPage {
 
     private fun checkListItem(index: Int, currencyCalculatorItem: CurrencyCalculatorItem) = also {
         CURRENCY_RATES_LIST.perform(
-            scrollToPosition<CurrencyCalculatorItemViewHolder>(
+            scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
                 index
             )
         )

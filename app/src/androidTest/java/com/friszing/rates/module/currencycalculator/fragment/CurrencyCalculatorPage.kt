@@ -1,23 +1,27 @@
 package com.friszing.rates.module.currencycalculator.fragment
 
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.R
 import com.friszing.rates.utils.actionOnChild
 import com.friszing.rates.utils.atPosition
 import com.friszing.rates.utils.childOfViewAtPositionWithMatcher
 import com.friszing.rates.utils.formatCurrency
+import com.google.common.truth.Truth.assertThat
+import org.junit.Assert
 
 internal fun currencyCalculatorPage(
     action: CurrencyCalculatorPage.() -> Unit
@@ -55,6 +59,14 @@ internal class CurrencyCalculatorPage {
         )
     }
 
+    fun scrollPageTo(position: Int) = also {
+        CURRENCY_RATES_LIST.perform(
+            scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
+                position
+            )
+        )
+    }
+
     fun changeCalculationValue(value: Double) = also {
         CURRENCY_RATES_LIST.perform(
             scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
@@ -64,7 +76,14 @@ internal class CurrencyCalculatorPage {
 
         CURRENCY_RATES_LIST.perform(
             actionOnChild(
-                replaceText(value.formatCurrency()),
+                replaceText(""),
+                R.id.amount
+            )
+        )
+
+        CURRENCY_RATES_LIST.perform(
+            actionOnChild(
+                typeText(value.formatCurrency()),
                 R.id.amount
             )
         )
@@ -139,6 +158,14 @@ internal class CurrencyCalculatorPage {
                 )
             )
         )
+    }
+
+    fun checkKeyboardVisibility(isVisible: Boolean) = also {
+        val inputMethodManager =
+            InstrumentationRegistry.getInstrumentation().targetContext.getSystemService(
+                Context.INPUT_METHOD_SERVICE
+            ) as InputMethodManager
+        assertThat(inputMethodManager.isAcceptingText).isEqualTo(isVisible)
     }
 
     private companion object {

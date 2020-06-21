@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
-- Fix:  In the landscape mode user can't use fractional digits
+- Fix: In the landscape mode user can't use fractional digits
 - Fix: Selection doesn't apply
 
 ### Ararat[1.0.0] - 2020-06-12

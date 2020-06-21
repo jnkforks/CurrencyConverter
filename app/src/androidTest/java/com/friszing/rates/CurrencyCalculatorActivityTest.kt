@@ -138,6 +138,26 @@ class CurrencyCalculatorActivityTest {
             }
         }
 
+    @Test
+    fun should_close_keyboard_when_the_base_value_input_lose_its_focus() = runBlockingTest {
+        // GIVEN
+        val expectedCurrencyRateList = getCurrencyRateList("mock/latest_rates_euro.json")
+        setUpCurrencyRateService("EUR", "mock/latest_rates_euro.json")
+
+        activityRule.launchActivity(null)
+        currencyCalculatorPage {
+            //GIVEN
+            changeCalculationValue(10.0)
+
+            // WHEN
+            scrollPageTo(expectedCurrencyRateList.lastIndex)
+
+            // THEN
+            checkKeyboardVisibility(false)
+        }
+    }
+
+
     private suspend fun setUpCurrencyRateService(currency: String, path: String) {
         val currencyListResponse = responseUtils.loadJson(
             path,

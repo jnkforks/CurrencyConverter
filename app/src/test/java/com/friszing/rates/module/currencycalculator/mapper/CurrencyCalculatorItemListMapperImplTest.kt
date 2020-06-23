@@ -5,11 +5,13 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -22,8 +24,16 @@ class CurrencyCalculatorItemListMapperImplTest {
     @Mock
     private lateinit var currencyDetailProvider: CurrencyDetailProvider
 
+    @Mock
+    private lateinit var currencyValueCalculator: CurrencyValueCalculator
+
     @InjectMocks
     private lateinit var ratesItemListMapperImpl: CurrencyCalculatorItemListMapperImpl
+
+    @Before
+    fun setUp() {
+        setUpCurrencyValueCalculator()
+    }
 
     @Test
     fun `Should return the base currency as the first item of the currency rate items`() {
@@ -75,7 +85,7 @@ class CurrencyCalculatorItemListMapperImplTest {
                 ),
                 CurrencyCalculatorItem(
                     unitedStates,
-                    calculationValue * currencyRate
+                    0.0
                 )
             )
         )
@@ -101,5 +111,9 @@ class CurrencyCalculatorItemListMapperImplTest {
 
     private fun setUpCountryCodeMapper(currencyCode: String, country: CurrencyDetail) {
         whenever(currencyDetailProvider.provide(currencyCode)).thenReturn(country)
+    }
+
+    private fun setUpCurrencyValueCalculator() {
+        whenever(currencyValueCalculator.calculate(any(), any())).thenReturn(0.0)
     }
 }

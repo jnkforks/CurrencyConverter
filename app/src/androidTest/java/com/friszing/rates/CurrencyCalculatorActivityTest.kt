@@ -5,6 +5,7 @@ import androidx.test.rule.ActivityTestRule
 import com.friszing.rates.currencycalculator.CurrencyCalculatorItemListMapperImpl
 import com.friszing.rates.currencycalculator.CurrencyDetailProviderImpl
 import com.friszing.rates.currencycalculator.CurrencyRateListResponseMapperImpl
+import com.friszing.rates.currencycalculator.CurrencyValueCalculatorImpl
 import com.friszing.rates.daggermock.createCurrencyCalculatorAppDaggerMockRule
 import com.friszing.rates.di.module.StorageModule
 import com.friszing.rates.module.currencycalculator.fragment.currencyCalculatorPage
@@ -59,6 +60,7 @@ class CurrencyCalculatorActivityTest {
         // WHEN
         activityRule.launchActivity(null)
 
+        // THEN
         currencyCalculatorPage {
             checkAllCurrencyRateItems(expectedCurrencyRateList)
         }
@@ -73,6 +75,7 @@ class CurrencyCalculatorActivityTest {
         // WHEN
         activityRule.launchActivity(null)
 
+        // THEN
         currencyCalculatorPage {
             isSnackbarVisible()
         }
@@ -188,7 +191,10 @@ class CurrencyCalculatorActivityTest {
         // Unfortunately we cant use @InjectFromComponent if we use SubComponent of Dagger!
         responseMapper = CurrencyRateListResponseMapperImpl()
         currencyCalculatorItemListMapper =
-            CurrencyCalculatorItemListMapperImpl(CurrencyDetailProviderImpl())
+            CurrencyCalculatorItemListMapperImpl(
+                CurrencyDetailProviderImpl(),
+                CurrencyValueCalculatorImpl()
+            )
     }
 
     private fun cleanSharedPreferences() {

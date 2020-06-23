@@ -9,23 +9,26 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 @Module
-open class HttpModule {
+object HttpModule {
 
+    @JvmStatic
     @Singleton
     @Provides
-    open fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
+    @JvmStatic
     @Singleton
     @Provides
-    open fun provideMoshiConverterFactory(
+    fun provideMoshiConverterFactory(
         moshi: Moshi
     ): MoshiConverterFactory =
         MoshiConverterFactory
             .create(moshi)
 
+    @JvmStatic
     @Singleton
     @Provides
-    open fun provideRetrofit(
+    fun provideRetrofit(
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit = Retrofit.Builder()
         .baseUrl("https://hiring.revolut.codes/api/")

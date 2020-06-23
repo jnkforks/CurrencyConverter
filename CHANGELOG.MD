@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
-- Retry interval removed from ViewModel
+- Improvement: Dagger Singleton Provider modules changed to object.
+- Improvement: Retry interval removed from ViewModel
 - Fix: CurrencyValueCalculator implemented.
 - Fix: In the landscape mode user can't use fractional digits
 - Fix: Selection doesn't apply

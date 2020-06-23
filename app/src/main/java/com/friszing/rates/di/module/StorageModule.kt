@@ -9,12 +9,13 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-open class StorageModule {
+object StorageModule {
 
+    @JvmStatic
     @Singleton
     @Named("RepositoryConfig")
     @Provides
-    open fun provideConfigurationPreferences(
+    fun provideConfigurationPreferences(
         application: Application
     ): SharedPreferences =
         application.getSharedPreferences(
@@ -22,7 +23,5 @@ open class StorageModule {
             MODE_PRIVATE
         )
 
-    companion object {
-        const val CONFIGURATION_PREF = "CONFIGURATION_PREF"
-    }
+    const val CONFIGURATION_PREF = "CONFIGURATION_PREF"
 }

@@ -8,11 +8,8 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.R
@@ -42,7 +39,13 @@ internal class CurrencyCalculatorPage {
     }
 
     fun isSnackbarVisible() = also {
-        SNACKBAR.check(matches(isDisplayed()))
+        SNACKBAR.check(
+            matches(
+                withEffectiveVisibility(
+                    Visibility.VISIBLE
+                )
+            )
+        )
     }
 
     fun selectCurrencyItem(position: Int) = also {

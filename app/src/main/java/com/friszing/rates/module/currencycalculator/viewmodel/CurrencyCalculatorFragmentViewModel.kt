@@ -42,7 +42,6 @@ class CurrencyCalculatorFragmentViewModel(
             }.retryWhen { cause, _ ->
                 if (shouldRetry(cause)) {
                     handleException(cause)
-                    delay(RETRY_INTERVAL)
                     true
                 } else {
                     false
@@ -68,8 +67,4 @@ class CurrencyCalculatorFragmentViewModel(
 
     private fun shouldRetry(cause: Throwable) =
         cause is CurrencyCalculatorConnectionErrorException
-
-    private companion object {
-        private const val RETRY_INTERVAL = 5000L
-    }
 }

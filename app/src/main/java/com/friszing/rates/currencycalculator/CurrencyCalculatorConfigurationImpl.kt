@@ -2,11 +2,11 @@ package com.friszing.rates.currencycalculator
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorRepositoryConfiguration
+import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorConfiguration
 
-class CurrencyCalculatorRepositoryConfigurationImpl(
+class CurrencyCalculatorConfigurationImpl(
     private val configurationPreferences: SharedPreferences
-) : CurrencyCalculatorRepositoryConfiguration {
+) : CurrencyCalculatorConfiguration {
 
     override var baseCurrency: String
         get() = requireNotNull(

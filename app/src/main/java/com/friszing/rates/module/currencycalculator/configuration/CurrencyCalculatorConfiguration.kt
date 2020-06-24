@@ -1,6 +1,6 @@
 package com.friszing.rates.module.currencycalculator.configuration
 
-interface CurrencyCalculatorRepositoryConfiguration {
+interface CurrencyCalculatorConfiguration {
     var baseCurrency: String
     var baseCalculationValue: Double
     val requestIntervalMillis: Long

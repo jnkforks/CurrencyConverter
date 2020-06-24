@@ -1,6 +1,6 @@
 package com.friszing.rates.currencycalculator
 
-import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorRepositoryConfiguration
+import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorConfiguration
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
@@ -20,12 +20,12 @@ class CurrencyCalculatorRepositoryImpl(
     private val service: CurrencyRateService,
     private val responseMapper: CurrencyRateListResponseMapper,
     private val currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
-    private val repositoryConfiguration: CurrencyCalculatorRepositoryConfiguration,
+    private val configuration: CurrencyCalculatorConfiguration,
     private val coroutineDispatcher: CoroutineDispatcher
 ) : CurrencyCalculatorRepository {
 
     override fun changeBaseCurrency(currencyCalculatorItem: CurrencyCalculatorItem) {
-        repositoryConfiguration.apply {
+        configuration.apply {
             baseCurrency = currencyCalculatorItem.currencyDetail.currencySymbol
             baseCalculationValue = currencyCalculatorItem.value.toDouble()
         }
@@ -37,17 +37,17 @@ class CurrencyCalculatorRepositoryImpl(
             try {
                 val currencyRateList = responseMapper.map(
                     service.fetchCurrencyRatesList(
-                        repositoryConfiguration.baseCurrency
+                        configuration.baseCurrency
                     )
                 )
 
                 emit(
                     currencyCalculatorItemListMapper.map(
                         currencyRateList,
-                        repositoryConfiguration.baseCalculationValue
+                        configuration.baseCalculationValue
                     )
                 )
-                delay(repositoryConfiguration.requestIntervalMillis)
+                delay(configuration.requestIntervalMillis)
             } catch (exception: CurrencyCalculatorException) {
                 throw exception
             } catch (exception: IOException) {

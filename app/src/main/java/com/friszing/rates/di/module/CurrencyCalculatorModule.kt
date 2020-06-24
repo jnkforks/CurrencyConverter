@@ -3,7 +3,7 @@ package com.friszing.rates.di.module
 import android.content.SharedPreferences
 import com.friszing.rates.currencycalculator.*
 import com.friszing.rates.di.scope.CurrencyCalculatorScope
-import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorRepositoryConfiguration
+import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorConfiguration
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorBaseCurrencyDiffUtil
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorBaseCurrencyDiffUtilImpl
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentFactory
@@ -35,8 +35,8 @@ open class CurrencyCalculatorModule {
     open fun provideCurrencyRateRepositoryConfiguration(
         @Named("RepositoryConfig")
         sharedPreferences: SharedPreferences
-    ): CurrencyCalculatorRepositoryConfiguration =
-        CurrencyCalculatorRepositoryConfigurationImpl(
+    ): CurrencyCalculatorConfiguration =
+        CurrencyCalculatorConfigurationImpl(
             sharedPreferences
         )
 
@@ -46,12 +46,12 @@ open class CurrencyCalculatorModule {
         service: CurrencyRateService,
         responseMapper: CurrencyRateListResponseMapper,
         currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
-        repositoryConfiguration: CurrencyCalculatorRepositoryConfiguration
+        configuration: CurrencyCalculatorConfiguration
     ): CurrencyCalculatorRepository = CurrencyCalculatorRepositoryImpl(
         service,
         responseMapper,
         currencyCalculatorItemListMapper,
-        repositoryConfiguration,
+        configuration,
         IO
     )
 

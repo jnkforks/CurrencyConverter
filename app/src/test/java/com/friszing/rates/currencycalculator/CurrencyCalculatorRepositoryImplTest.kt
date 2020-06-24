@@ -1,6 +1,6 @@
 package com.friszing.rates.currencycalculator
 
-import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorRepositoryConfiguration
+import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalculatorConfiguration
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorParseException
@@ -47,7 +47,7 @@ class CurrencyCalculatorRepositoryImplTest {
     private lateinit var currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper
 
     @Mock
-    private lateinit var repositoryConfiguration: CurrencyCalculatorRepositoryConfiguration
+    private lateinit var configuration: CurrencyCalculatorConfiguration
 
     lateinit var testDispatcher: TestCoroutineDispatcher
 
@@ -66,7 +66,7 @@ class CurrencyCalculatorRepositoryImplTest {
                 service,
                 responseMapper,
                 currencyCalculatorItemListMapper,
-                repositoryConfiguration,
+                configuration,
                 testDispatcher
             )
     }
@@ -145,7 +145,7 @@ class CurrencyCalculatorRepositoryImplTest {
         )
 
         // THEN
-        verify(repositoryConfiguration).baseCurrency = "USD"
+        verify(configuration).baseCurrency = "USD"
     }
 
     @Test(expected = CurrencyCalculatorGeneralException::class)
@@ -233,10 +233,10 @@ class CurrencyCalculatorRepositoryImplTest {
     }
 
     private fun setUpRequestIntervalMillis(requestIntervalMillis: Long) {
-        whenever(repositoryConfiguration.requestIntervalMillis).thenReturn(requestIntervalMillis)
+        whenever(configuration.requestIntervalMillis).thenReturn(requestIntervalMillis)
     }
 
     private fun setUpBaseCurrency(currency: String) {
-        whenever(repositoryConfiguration.baseCurrency).thenReturn(currency)
+        whenever(configuration.baseCurrency).thenReturn(currency)
     }
 }

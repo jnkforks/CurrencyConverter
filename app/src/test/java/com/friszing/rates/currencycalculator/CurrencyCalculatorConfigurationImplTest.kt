@@ -13,13 +13,13 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class CurrencyCalculatorRepositoryConfigurationImplTest {
+class CurrencyCalculatorConfigurationImplTest {
 
     @Mock
     private lateinit var sharedPreferences: SharedPreferences
 
     @InjectMocks
-    private lateinit var configuration: CurrencyCalculatorRepositoryConfigurationImpl
+    private lateinit var configuration: CurrencyCalculatorConfigurationImpl
 
     @Test
     fun `Should provide the base currency from the shared preferences`() {
@@ -43,7 +43,7 @@ class CurrencyCalculatorRepositoryConfigurationImplTest {
 
         // THEN
         verify(editor).putString(
-            CurrencyCalculatorRepositoryConfigurationImpl.KEY_CURRENCY,
+            CurrencyCalculatorConfigurationImpl.KEY_CURRENCY,
             "EUR"
         )
         verify(editor).apply()
@@ -77,7 +77,7 @@ class CurrencyCalculatorRepositoryConfigurationImplTest {
 
         // THEN
         verify(editor).putFloat(
-            CurrencyCalculatorRepositoryConfigurationImpl.KEY_CALCULATION,
+            CurrencyCalculatorConfigurationImpl.KEY_CALCULATION,
             100.0.toFloat()
         )
         verify(editor).apply()

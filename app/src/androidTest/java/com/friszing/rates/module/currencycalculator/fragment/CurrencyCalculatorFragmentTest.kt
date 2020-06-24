@@ -8,6 +8,8 @@ import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExc
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeBaseCalculationValueUseCase
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
@@ -27,6 +29,12 @@ class CurrencyCalculatorFragmentTest {
 
     @Mock
     private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+
+    @Mock
+    private lateinit var changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase
+
+    @Mock
+    private lateinit var changeBaseCalculationValueUseCase: CurrencyCalculatorChangeBaseCalculationValueUseCase
 
     @Mock
     lateinit var currencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
@@ -118,7 +126,7 @@ class CurrencyCalculatorFragmentTest {
         selectCurrencyItem(CURRENCY_USD_POSITION)
 
         // THEN
-        verify(ratesRepository).changeBaseCurrency(CurrencyRateItems[CURRENCY_USD_POSITION])
+        verify(changeBaseCalculationValueUseCase).invoke(CurrencyRateItems[CURRENCY_USD_POSITION])
     }
 
     @Test
@@ -184,7 +192,9 @@ class CurrencyCalculatorFragmentTest {
             CurrencyCalculatorFragmentFactory(
                 CurrencyCalculatorFragmentViewModelFactory(
                     ratesRepository,
-                    currencyCalculatorExceptionMapper
+                    currencyCalculatorExceptionMapper,
+                    changeCalculationValueUseCase,
+                    changeBaseCalculationValueUseCase
                 ),
                 currencyDiffUtil
             )

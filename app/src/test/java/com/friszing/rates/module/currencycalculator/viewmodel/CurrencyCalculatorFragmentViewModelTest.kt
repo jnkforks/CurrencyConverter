@@ -6,6 +6,7 @@ import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorF
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeBaseCalculationValueUseCase
 import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
 import com.friszing.rates.util.TestCoroutineRule
 import com.jraska.livedata.test
@@ -40,6 +41,9 @@ class CurrencyCalculatorFragmentViewModelTest {
 
     @Mock
     private lateinit var changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase
+
+    @Mock
+    private lateinit var changeBaseCalculationValueUseCase: CurrencyCalculatorChangeBaseCalculationValueUseCase
 
     private lateinit var viewModel: CurrencyCalculatorFragmentViewModel
 
@@ -201,7 +205,7 @@ class CurrencyCalculatorFragmentViewModelTest {
         viewModel.onCurrencyItemClicked(currencyCalculatorItem)
 
         // THEN
-        verify(ratesRepository).changeBaseCurrency(currencyCalculatorItem)
+        verify(changeBaseCalculationValueUseCase).invoke(currencyCalculatorItem)
     }
 
     @Test
@@ -220,7 +224,8 @@ class CurrencyCalculatorFragmentViewModelTest {
     private fun createViewModel() = CurrencyCalculatorFragmentViewModel(
         ratesRepository,
         currencyCalculatorExceptionMapper,
-        changeCalculationValueUseCase
+        changeCalculationValueUseCase,
+        changeBaseCalculationValueUseCase
     )
 
     private fun setUpCurrencyCalculatorExceptionMapper(

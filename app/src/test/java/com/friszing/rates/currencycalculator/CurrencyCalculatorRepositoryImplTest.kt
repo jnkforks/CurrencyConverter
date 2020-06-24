@@ -130,24 +130,6 @@ class CurrencyCalculatorRepositoryImplTest {
             testDispatcher.advanceTimeBy(5000)
         }
 
-    @Test
-    fun `Should change the base currency in the configuration when it is changed`() {
-        // WHEN
-        repository.changeBaseCurrency(
-            CurrencyCalculatorItem(
-                CurrencyDetail(
-                    "USD",
-                    "",
-                    ""
-                ),
-                100.0
-            )
-        )
-
-        // THEN
-        verify(configuration).baseCurrency = "USD"
-    }
-
     @Test(expected = CurrencyCalculatorGeneralException::class)
     fun `Should throw the general exception when unhandled expected is thrown by the service`() =
         runBlockingTest {

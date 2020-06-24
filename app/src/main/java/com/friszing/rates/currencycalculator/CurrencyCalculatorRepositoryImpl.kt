@@ -6,7 +6,6 @@ import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculator
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
-import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
 import java.io.IOException
@@ -23,13 +22,6 @@ class CurrencyCalculatorRepositoryImpl(
     private val configuration: CurrencyCalculatorConfiguration,
     private val coroutineDispatcher: CoroutineDispatcher
 ) : CurrencyCalculatorRepository {
-
-    override fun changeBaseCurrency(currencyCalculatorItem: CurrencyCalculatorItem) {
-        configuration.apply {
-            baseCurrency = currencyCalculatorItem.currencyDetail.currencySymbol
-            baseCalculationValue = currencyCalculatorItem.value.toDouble()
-        }
-    }
 
     @Throws(CurrencyCalculatorException::class)
     override fun getRates() = flow {

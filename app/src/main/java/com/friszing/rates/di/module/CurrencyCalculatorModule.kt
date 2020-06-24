@@ -10,6 +10,7 @@ import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorF
 import com.friszing.rates.module.currencycalculator.mapper.*
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -83,12 +84,23 @@ open class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
+    open fun provideCurrencyCalculatorChangeCalculationValueUseCase(
+        configuration: CurrencyCalculatorConfiguration
+    ): CurrencyCalculatorChangeCalculationValueUseCase =
+        CurrencyCalculatorChangeCalculationValueUseCaseImpl(
+            configuration
+        )
+
+    @CurrencyCalculatorScope
+    @Provides
     open fun provideCurrencyCalculatorFragmentViewModelFactory(
         ratesRepository: CurrencyCalculatorRepository,
-        currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+        currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper,
+        changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase
     ) = CurrencyCalculatorFragmentViewModelFactory(
         ratesRepository,
-        currencyCalculatorExceptionMapper
+        currencyCalculatorExceptionMapper,
+        changeCalculationValueUseCase
     )
 
     @CurrencyCalculatorScope

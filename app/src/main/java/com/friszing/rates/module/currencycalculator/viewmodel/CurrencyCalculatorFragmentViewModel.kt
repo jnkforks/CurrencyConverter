@@ -9,6 +9,7 @@ import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorF
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -19,7 +20,8 @@ import kotlinx.coroutines.flow.retryWhen
 @OptIn(ExperimentalCoroutinesApi::class)
 class CurrencyCalculatorFragmentViewModel(
     private val ratesRepository: CurrencyCalculatorRepository,
-    private val currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+    private val currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper,
+    private val changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableLiveData<CurrencyCalculatorFragmentViewState>()
@@ -61,8 +63,11 @@ class CurrencyCalculatorFragmentViewModel(
     fun onCurrencyItemClicked(currencyCalculatorItem: CurrencyCalculatorItem) =
         ratesRepository.changeBaseCurrency(currencyCalculatorItem)
 
-    fun onCurrencyCalculationValueChanged(currencyCalculatorItem: CurrencyCalculatorItem) =
-        ratesRepository.changeBaseCurrency(currencyCalculatorItem)
+    fun onCurrencyCalculationValueChanged(
+        currencyCalculatorItem: CurrencyCalculatorItem
+    ) = changeCalculationValueUseCase(
+        currencyCalculatorItem.value
+    )
 
     private fun shouldRetry(cause: Throwable) =
         cause is CurrencyCalculatorConnectionErrorException

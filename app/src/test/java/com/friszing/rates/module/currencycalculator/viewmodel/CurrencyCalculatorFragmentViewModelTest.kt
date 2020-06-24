@@ -6,14 +6,15 @@ import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorF
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
 import com.friszing.rates.util.TestCoroutineRule
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
@@ -36,6 +37,9 @@ class CurrencyCalculatorFragmentViewModelTest {
 
     @Mock
     private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+
+    @Mock
+    private lateinit var changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase
 
     private lateinit var viewModel: CurrencyCalculatorFragmentViewModel
 
@@ -210,15 +214,14 @@ class CurrencyCalculatorFragmentViewModelTest {
         viewModel.onCurrencyCalculationValueChanged(currencyCalculatorItem)
 
         // THEN
-        verify(ratesRepository).changeBaseCurrency(currencyCalculatorItem)
+        verify(changeCalculationValueUseCase).invoke(currencyCalculatorItem.value)
     }
 
-    private fun createViewModel(): CurrencyCalculatorFragmentViewModel {
-        return CurrencyCalculatorFragmentViewModel(
-            ratesRepository,
-            currencyCalculatorExceptionMapper
-        )
-    }
+    private fun createViewModel() = CurrencyCalculatorFragmentViewModel(
+        ratesRepository,
+        currencyCalculatorExceptionMapper,
+        changeCalculationValueUseCase
+    )
 
     private fun setUpCurrencyCalculatorExceptionMapper(
         errorId: Int

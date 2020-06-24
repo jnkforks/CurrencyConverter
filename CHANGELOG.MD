@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Development
+- Improvement: ViewModel, Repository Cleaning Part 1: Remove Change Calculation Value logic from Repository.
 - Improvement: Dagger Singleton Provider modules changed to object.
 - Improvement: Retry interval removed from ViewModel
 - Fix: CurrencyValueCalculator implemented.

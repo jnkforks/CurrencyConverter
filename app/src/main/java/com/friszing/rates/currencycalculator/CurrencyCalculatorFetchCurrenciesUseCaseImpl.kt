@@ -4,7 +4,7 @@ import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalcul
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentViewState
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListComposer
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorFetchCurrenciesUseCase
@@ -18,20 +18,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retryWhen
-import kotlinx.coroutines.flow.sample
 import kotlin.system.measureTimeMillis
 
 class CurrencyCalculatorFetchCurrenciesUseCaseImpl(
     private val ratesRepository: CurrencyCalculatorRepository,
     private val configuration: CurrencyCalculatorConfiguration,
-    private val currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
+    private val currencyCalculatorItemListComposer: CurrencyCalculatorItemListComposer,
     private val currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
 ) : CurrencyCalculatorFetchCurrenciesUseCase {
 
     private var lastCurrencyList = CurrencyRateList()
     private var exception: Throwable? = null
 
-    override fun invoke() = producerFlow.combine(consumerFlow) { currencyList, _ -> currencyList }
+    override fun invoke() = producerFlow.combine(replicationFlow) { currencyList, _ -> currencyList }
         .onEach {
             exception = null
             lastCurrencyList = it
@@ -42,7 +41,7 @@ class CurrencyCalculatorFetchCurrenciesUseCaseImpl(
         }
         .map {
             CurrencyCalculatorFragmentViewState(
-                items = currencyCalculatorItemListMapper.map(
+                items = currencyCalculatorItemListComposer.apply(
                     it,
                     configuration.baseCalculationValue
                 ),
@@ -65,7 +64,7 @@ class CurrencyCalculatorFetchCurrenciesUseCaseImpl(
         }
     }.flowOn(IO)
 
-    private val consumerFlow = flow {
+    private val replicationFlow = flow {
         while (true) emit(Unit)
     }.flowOn(Default)
 }

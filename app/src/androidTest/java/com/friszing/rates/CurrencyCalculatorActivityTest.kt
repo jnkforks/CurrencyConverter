@@ -2,14 +2,14 @@ package com.friszing.rates
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.friszing.rates.currencycalculator.CurrencyCalculatorItemListMapperImpl
+import com.friszing.rates.currencycalculator.CurrencyCalculatorItemListComposerImpl
 import com.friszing.rates.currencycalculator.CurrencyDetailProviderImpl
 import com.friszing.rates.currencycalculator.CurrencyRateListResponseMapperImpl
 import com.friszing.rates.currencycalculator.CurrencyValueCalculatorImpl
 import com.friszing.rates.daggermock.createCurrencyCalculatorAppDaggerMockRule
 import com.friszing.rates.di.module.StorageModule
 import com.friszing.rates.module.currencycalculator.fragment.currencyCalculatorPage
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListComposer
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateListResponse
@@ -42,7 +42,7 @@ class CurrencyCalculatorActivityTest {
 
     private lateinit var responseMapper: CurrencyRateListResponseMapper
 
-    private lateinit var currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper
+    private lateinit var currencyCalculatorItemListComposer: CurrencyCalculatorItemListComposer
 
     private val responseUtils = ResponseUtils()
 
@@ -185,14 +185,14 @@ class CurrencyCalculatorActivityTest {
             CurrencyRateListResponse::class.java
         )
         val currencyRateList = responseMapper.map(currencyListResponse)
-        return currencyCalculatorItemListMapper.map(currencyRateList, calculationValue)
+        return currencyCalculatorItemListComposer.apply(currencyRateList, calculationValue)
     }
 
     private fun setUpTestDependencies() {
         // Unfortunately we cant use @InjectFromComponent if we use SubComponent of Dagger!
         responseMapper = CurrencyRateListResponseMapperImpl()
-        currencyCalculatorItemListMapper =
-            CurrencyCalculatorItemListMapperImpl(
+        currencyCalculatorItemListComposer =
+            CurrencyCalculatorItemListComposerImpl(
                 CurrencyDetailProviderImpl(),
                 CurrencyValueCalculatorImpl()
             )

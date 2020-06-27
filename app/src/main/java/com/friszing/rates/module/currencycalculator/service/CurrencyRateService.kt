@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface CurrencyRateService {
 
-    @GET("android/latest")
+    @GET("latest")
     suspend fun fetchCurrencyRatesList(
         @Query("base") baseCurrency: String
     ): CurrencyRateListResponse?

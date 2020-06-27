@@ -31,7 +31,7 @@ object HttpModule {
     fun provideRetrofit(
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit = Retrofit.Builder()
-        .baseUrl("https://hiring.revolut.codes/api/")
+        .baseUrl("https://api.exchangeratesapi.io/")
         .addConverterFactory(moshiConverterFactory)
         .build()
 }

@@ -69,8 +69,8 @@ open class CurrencyCalculatorModule {
     open fun provideCurrencyCalculatorItemListMapper(
         currencyDetailProvider: CurrencyDetailProvider,
         currencyValueCalculator: CurrencyValueCalculator
-    ): CurrencyCalculatorItemListMapper =
-        CurrencyCalculatorItemListMapperImpl(
+    ): CurrencyCalculatorItemListComposer =
+        CurrencyCalculatorItemListComposerImpl(
             currencyDetailProvider,
             currencyValueCalculator
         )
@@ -103,12 +103,12 @@ open class CurrencyCalculatorModule {
     open fun provideCurrencyCalculatorFetchCurrenciesUseCase(
         ratesRepository: CurrencyCalculatorRepository,
         configuration: CurrencyCalculatorConfiguration,
-        currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
+        currencyCalculatorItemListComposer: CurrencyCalculatorItemListComposer,
         currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
     ): CurrencyCalculatorFetchCurrenciesUseCase = CurrencyCalculatorFetchCurrenciesUseCaseImpl(
         ratesRepository,
         configuration,
-        currencyCalculatorItemListMapper,
+        currencyCalculatorItemListComposer,
         currencyCalculatorExceptionMapper
     )
 

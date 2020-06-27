@@ -12,7 +12,7 @@ class CurrencyRateListResponseMapperImpl :
     override fun map(currencyRateListResponse: CurrencyRateListResponse?): CurrencyRateList {
         try {
             val response = checkNotNull(currencyRateListResponse)
-            val baseCurrency = checkNotNull(response.baseCurrency)
+            val baseCurrency = checkNotNull(response.base)
             val rates = checkNotNull(response.rates)
 
             check(baseCurrency.isNotBlank())

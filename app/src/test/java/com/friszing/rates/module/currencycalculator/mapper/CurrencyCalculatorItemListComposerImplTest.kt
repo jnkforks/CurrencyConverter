@@ -1,6 +1,6 @@
 package com.friszing.rates.module.currencycalculator.mapper
 
-import com.friszing.rates.currencycalculator.CurrencyCalculatorItemListMapperImpl
+import com.friszing.rates.currencycalculator.CurrencyCalculatorItemListComposerImpl
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
@@ -19,7 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.Mock
 
 @RunWith(MockitoJUnitRunner::class)
-class CurrencyCalculatorItemListMapperImplTest {
+class CurrencyCalculatorItemListComposerImplTest {
 
     @Mock
     private lateinit var currencyDetailProvider: CurrencyDetailProvider
@@ -28,7 +28,7 @@ class CurrencyCalculatorItemListMapperImplTest {
     private lateinit var currencyValueCalculator: CurrencyValueCalculator
 
     @InjectMocks
-    private lateinit var ratesItemListMapperImpl: CurrencyCalculatorItemListMapperImpl
+    private lateinit var ratesItemListMapperImpl: CurrencyCalculatorItemListComposerImpl
 
     @Before
     fun setUp() {
@@ -48,7 +48,7 @@ class CurrencyCalculatorItemListMapperImplTest {
         setUpCountryCodeMapper("USD", unitedStates)
 
         // WHEN
-        val currencyRateItems = ratesItemListMapperImpl.map(currencyRateList, calculationValue)
+        val currencyRateItems = ratesItemListMapperImpl.apply(currencyRateList, calculationValue)
 
         // THEN
         assertThat(currencyRateItems.first()).isEqualTo(
@@ -74,7 +74,7 @@ class CurrencyCalculatorItemListMapperImplTest {
         setUpCountryCodeMapper("USD", unitedStates)
 
         // WHEN
-        val currencyRateItems = ratesItemListMapperImpl.map(currencyRateList, calculationValue)
+        val currencyRateItems = ratesItemListMapperImpl.apply(currencyRateList, calculationValue)
 
         // THEN
         assertThat(currencyRateItems).isEqualTo(
@@ -102,7 +102,7 @@ class CurrencyCalculatorItemListMapperImplTest {
         setUpCountryCodeMapper("USD", mock())
 
         // WHEN
-        ratesItemListMapperImpl.map(currencyRateList, calculationValue)
+        ratesItemListMapperImpl.apply(currencyRateList, calculationValue)
 
         // THEN
         verify(currencyDetailProvider, times(2)).provide(countryCodeMapperArgumentCaptor.capture())
@@ -113,7 +113,7 @@ class CurrencyCalculatorItemListMapperImplTest {
     fun `Should not map when the base currency is blank`() {
         // WHEN
         val currencyList =
-            ratesItemListMapperImpl.map(CurrencyRateList("", mapOf("USD" to 1.2)), 0.0)
+            ratesItemListMapperImpl.apply(CurrencyRateList("", mapOf("USD" to 1.2)), 0.0)
 
         // THEN
         assertThat(currencyList).isEmpty()

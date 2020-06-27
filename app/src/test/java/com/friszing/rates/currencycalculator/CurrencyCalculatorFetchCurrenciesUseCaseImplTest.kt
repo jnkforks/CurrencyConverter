@@ -6,7 +6,7 @@ import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculator
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
 import com.friszing.rates.module.currencycalculator.fragment.CurrencyCalculatorFragmentViewState
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
+import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListComposer
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
@@ -47,7 +47,7 @@ class CurrencyCalculatorFetchCurrenciesUseCaseImplTest {
     private lateinit var configuration: CurrencyCalculatorConfiguration
 
     @Mock
-    private lateinit var currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper
+    private lateinit var currencyCalculatorItemListComposer: CurrencyCalculatorItemListComposer
 
     @Mock
     private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
@@ -91,7 +91,7 @@ class CurrencyCalculatorFetchCurrenciesUseCaseImplTest {
     fun `Should show the recently fetched currency list`() = runBlocking {
         // GIVEN
         val currencyCalculatorItems = mock<List<CurrencyCalculatorItem>>()
-        whenever(currencyCalculatorItemListMapper.map(any(), any())).thenReturn(
+        whenever(currencyCalculatorItemListComposer.apply(any(), any())).thenReturn(
             currencyCalculatorItems
         )
         setUpCurrencyCalculatorRepository(mock())
@@ -118,7 +118,7 @@ class CurrencyCalculatorFetchCurrenciesUseCaseImplTest {
             .first()
 
         // THEN
-        verify(currencyCalculatorItemListMapper, atLeastOnce()).map(
+        verify(currencyCalculatorItemListComposer, atLeastOnce()).apply(
             currencyRateList,
             configuration.baseCalculationValue
         )

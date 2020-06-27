@@ -39,7 +39,8 @@ class CurrencyDetailProviderImpl :
         "SGD" to "https://flagpedia.net/data/flags/w2560/sg.png",
         "THB" to "https://flagpedia.net/data/flags/w2560/th.png",
         "USD" to "https://flagpedia.net/data/flags/w2560/us.png",
-        "ZAR" to "https://flagpedia.net/data/flags/w2560/za.png"
+        "ZAR" to "https://flagpedia.net/data/flags/w2560/za.png",
+        "TRY" to "https://flagpedia.net/data/flags/w2560/tr.png"
     )
 
     override fun provide(currencyCode: String): CurrencyDetail {

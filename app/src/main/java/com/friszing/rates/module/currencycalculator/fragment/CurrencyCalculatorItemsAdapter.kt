@@ -120,7 +120,9 @@ class CurrencyCalculatorItemsAdapter(
             )
         ).apply {
             setOnAmountChanged {
-                baseCalculationValueChanged?.invoke(currencyRateItems[adapterPosition].copy(value = it))
+                baseCalculationValueChanged?.invoke(
+                    currencyRateItems[adapterPosition].copy(value = it)
+                )
             }
         }
     } else {

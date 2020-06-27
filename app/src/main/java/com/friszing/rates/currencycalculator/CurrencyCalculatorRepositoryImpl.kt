@@ -4,49 +4,41 @@ import com.friszing.rates.module.currencycalculator.configuration.CurrencyCalcul
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorConnectionErrorException
 import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorItemListMapper
 import com.friszing.rates.module.currencycalculator.mapper.CurrencyRateListResponseMapper
 import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
 import java.io.IOException
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
+import java.lang.Exception
+import java.net.UnknownHostException
 
 class CurrencyCalculatorRepositoryImpl(
     private val service: CurrencyRateService,
     private val responseMapper: CurrencyRateListResponseMapper,
-    private val currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
-    private val configuration: CurrencyCalculatorConfiguration,
-    private val coroutineDispatcher: CoroutineDispatcher
+    private val configuration: CurrencyCalculatorConfiguration
 ) : CurrencyCalculatorRepository {
 
     @Throws(CurrencyCalculatorException::class)
-    override fun getRates() = flow {
-        while (true) {
-            try {
-                val currencyRateList = responseMapper.map(
-                    service.fetchCurrencyRatesList(
-                        configuration.baseCurrency
-                    )
+    override suspend fun fetchRates() = withContext(IO) {
+        try {
+            responseMapper.map(
+                service.fetchCurrencyRatesList(
+                    configuration.baseCurrency
                 )
-
-                emit(
-                    currencyCalculatorItemListMapper.map(
-                        currencyRateList,
-                        configuration.baseCalculationValue
-                    )
-                )
-                delay(configuration.requestIntervalMillis)
-            } catch (exception: CurrencyCalculatorException) {
-                throw exception
-            } catch (exception: IOException) {
-                throw CurrencyCalculatorConnectionErrorException(exception)
-            } catch (exception: Exception) {
-                throw CurrencyCalculatorGeneralException(exception)
-            }
+            )
+        } catch (exception: Exception) {
+            handleException(exception)
         }
-    }.buffer().flowOn(coroutineDispatcher)
+    }
+
+    private fun handleException(throwable: Throwable): Nothing {
+        throw when (throwable) {
+            is CurrencyCalculatorException -> throwable
+            is IOException, is UnknownHostException -> CurrencyCalculatorConnectionErrorException(
+                throwable
+            )
+            else -> CurrencyCalculatorGeneralException(throwable)
+        }
+    }
 }

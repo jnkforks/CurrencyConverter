@@ -5,18 +5,18 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.module.currencycalculator.model.CurrencyRateList
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.whenever
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Test
 import org.mockito.InjectMocks
-import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mock
 
 @RunWith(MockitoJUnitRunner::class)
 class CurrencyCalculatorItemListMapperImplTest {
@@ -107,6 +107,16 @@ class CurrencyCalculatorItemListMapperImplTest {
         // THEN
         verify(currencyDetailProvider, times(2)).provide(countryCodeMapperArgumentCaptor.capture())
         assertThat(countryCodeMapperArgumentCaptor.allValues).isEqualTo(listOf("EUR", "USD"))
+    }
+
+    @Test
+    fun `Should not map when the base currency is blank`() {
+        // WHEN
+        val currencyList =
+            ratesItemListMapperImpl.map(CurrencyRateList("", mapOf("USD" to 1.2)), 0.0)
+
+        // THEN
+        assertThat(currencyList).isEmpty()
     }
 
     private fun setUpCountryCodeMapper(currencyCode: String, country: CurrencyDetail) {

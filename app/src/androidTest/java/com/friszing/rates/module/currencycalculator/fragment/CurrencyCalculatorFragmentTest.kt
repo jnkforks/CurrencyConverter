@@ -1,21 +1,19 @@
 package com.friszing.rates.module.currencycalculator.fragment
 
-import androidx.annotation.StringRes
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.Lifecycle.State.RESUMED
 import com.friszing.rates.R
-import com.friszing.rates.module.currencycalculator.exception.CurrencyCalculatorException.CurrencyCalculatorGeneralException
-import com.friszing.rates.module.currencycalculator.mapper.CurrencyCalculatorExceptionMapper
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
-import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculatorRepository
 import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeBaseCalculationValueUseCase
 import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorFetchCurrenciesUseCase
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -25,10 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class CurrencyCalculatorFragmentTest {
 
     @Mock
-    private lateinit var ratesRepository: CurrencyCalculatorRepository
-
-    @Mock
-    private lateinit var currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+    private lateinit var fetchCurrenciesUseCase: CurrencyCalculatorFetchCurrenciesUseCase
 
     @Mock
     private lateinit var changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase
@@ -39,12 +34,14 @@ class CurrencyCalculatorFragmentTest {
     @Mock
     lateinit var currencyDiffUtil: CurrencyCalculatorBaseCurrencyDiffUtil
 
+    @Before
+    fun setUp() {
+        setUpChangeCalculationValueUseCase(CurrencyRateItems)
+    }
+
     @Test
     fun should_show_the_currency_rates_fragment() =
         currencyCalculatorPage {
-            // GIVEN
-            setUpCurrencyRateRepository(CurrencyRateItems)
-
             // WHEN
             launchFragment()
 
@@ -55,9 +52,6 @@ class CurrencyCalculatorFragmentTest {
     @Test
     fun should_show_the_current_rate_items_list() =
         currencyCalculatorPage {
-            // GIVEN
-            setUpCurrencyRateRepository(CurrencyRateItems)
-
             // WHEN
             launchFragment()
 
@@ -68,13 +62,6 @@ class CurrencyCalculatorFragmentTest {
     @Test
     fun should_show_the_currencies_rates_in_the_currency_rate_items_list() =
         currencyCalculatorPage {
-            // GIVEN
-            setUpCurrencyRateRepository(
-                CurrencyRateItems,
-                times = 4,
-                delayMillis = 2000L
-            )
-
             // WHEN
             launchFragment()
 
@@ -86,10 +73,7 @@ class CurrencyCalculatorFragmentTest {
     fun should_show_the_loading_indicator_before_the_fetching_currency_rates_starts() =
         currencyCalculatorPage {
             // GIVEN
-            setUpCurrencyRateRepository(
-                CurrencyRateItems,
-                2000L
-            )
+            setUpChangeCalculationValueUseCaseForLoading()
 
             // WHEN
             launchFragment()
@@ -102,12 +86,7 @@ class CurrencyCalculatorFragmentTest {
     fun should_show_the_snackbar_when_the_fetching_currency_rates_fails() =
         currencyCalculatorPage {
             // GIVEN
-            setUpCurrencyRateRepositoryWithException(
-                CurrencyCalculatorGeneralException(
-                    null
-                )
-            )
-            setUpCurrencyRatesExceptionMapper(R.string.rates_calculator__general_error_message)
+            setUpChangeCalculationValueUseCaseForError()
 
             // WHEN
             launchFragment()
@@ -117,73 +96,74 @@ class CurrencyCalculatorFragmentTest {
         }
 
     @Test
-    fun should_change_fetched_currency_when_the_base_item_is_changed() = currencyCalculatorPage {
-        // GIVEN
-        setUpCurrencyRateRepository(CurrencyRateItems)
-        launchFragment()
+    fun should_change_fetched_currency_when_the_base_item_is_changed() =
+        currencyCalculatorPage {
+            // GIVEN
+            setUpChangeCalculationValueUseCase(CurrencyRateItems)
+            launchFragment()
 
-        // WHEN
-        selectCurrencyItem(CURRENCY_USD_POSITION)
+            // WHEN
+            selectCurrencyItem(CURRENCY_USD_POSITION)
 
-        // THEN
-        verify(changeBaseCalculationValueUseCase).invoke(CurrencyRateItems[CURRENCY_USD_POSITION])
-    }
-
-    @Test
-    fun should_check_the_input_of_the_base_currency_enabled() = currencyCalculatorPage {
-        // GIVEN
-        setUpCurrencyRateRepository(CurrencyRateItems)
-        launchFragment()
-
-        // WHEN
-        selectCurrencyItem(CURRENCY_USD_POSITION)
-
-        // THEN
-        checkCurrencyInputEnabled(0, true)
-    }
+            // THEN
+            verify(changeBaseCalculationValueUseCase).invoke(CurrencyRateItems[CURRENCY_USD_POSITION])
+        }
 
     @Test
-    fun should_check_the_input_of_the_other_currencies_disabled() = currencyCalculatorPage {
-        // GIVEN
-        setUpCurrencyRateRepository(CurrencyRateItems)
-        launchFragment()
+    fun should_show_the_keyboard_when_the_base_currency_input_is_clicked() =
+        currencyCalculatorPage {
+            // GIVEN
+            setUpChangeCalculationValueUseCase(CurrencyRateItems)
+            launchFragment()
 
-        // WHEN
-        selectCurrencyItem(CURRENCY_USD_POSITION)
+            // WHEN
+            selectCurrencyItem(CURRENCY_USD_POSITION)
 
-        // THEN
-        checkCurrencyInputEnabled(1, false)
-    }
+            // THEN
+            checkKeyBoardIsShown(0, true)
+        }
 
-    private fun setUpCurrencyRatesExceptionMapper(
-        @StringRes value: Int
+    @Test
+    fun should_not_show_the_keyboard_when_the_other_currencies_input_is_clicked() =
+        currencyCalculatorPage {
+            // GIVEN
+            setUpChangeCalculationValueUseCase(CurrencyRateItems)
+            launchFragment()
+
+            // WHEN
+            selectCurrencyItem(CURRENCY_USD_POSITION)
+
+            // THEN
+            checkKeyBoardIsShown(1, false)
+        }
+
+    private fun setUpChangeCalculationValueUseCase(
+        currencyRateList: List<CurrencyCalculatorItem>
     ) {
-        whenever(currencyCalculatorExceptionMapper.map(any()))
-            .thenReturn(value)
-    }
-
-    private fun setUpCurrencyRateRepository(
-        currencyRateList: List<CurrencyCalculatorItem>,
-        initialDelayMillis: Long = 0,
-        delayMillis: Long = 0,
-        times: Int = 1
-    ) {
-        whenever(ratesRepository.getRates()).thenReturn(
+        whenever(fetchCurrenciesUseCase.invoke()).thenReturn(
             flow {
-                repeat(times) {
-                    delay(initialDelayMillis)
-                    emit(currencyRateList)
-                    delay(delayMillis)
-                }
+                emit(CurrencyCalculatorFragmentViewState(items = currencyRateList))
+                delay(1000)
             }
         )
     }
 
-    private fun setUpCurrencyRateRepositoryWithException(
-        throwable: Throwable
+    private fun setUpChangeCalculationValueUseCaseForError() {
+        whenever(fetchCurrenciesUseCase.invoke()).thenReturn(
+            flow {
+                emit(CurrencyCalculatorFragmentViewState(error = R.string.rates_calculator__network_error_message))
+                delay(1000)
+            }
+        )
+    }
+
+    private fun setUpChangeCalculationValueUseCaseForLoading(
     ) {
-        whenever(ratesRepository.getRates()).thenReturn(
-            flow { throw throwable }
+        whenever(fetchCurrenciesUseCase.invoke()).thenReturn(
+            flow {
+                emit(CurrencyCalculatorFragmentViewState(loading = true))
+                delay(1000)
+            }
         )
     }
 
@@ -191,17 +171,17 @@ class CurrencyCalculatorFragmentTest {
         val factory =
             CurrencyCalculatorFragmentFactory(
                 CurrencyCalculatorFragmentViewModelFactory(
-                    ratesRepository,
-                    currencyCalculatorExceptionMapper,
+                    fetchCurrenciesUseCase,
                     changeCalculationValueUseCase,
                     changeBaseCalculationValueUseCase
                 ),
                 currencyDiffUtil
             )
-        launchFragmentInContainer<CurrencyCalculatorFragment>(
+        val fragmentScenario = launchFragmentInContainer<CurrencyCalculatorFragment>(
             themeResId = R.style.AppTheme,
             factory = factory
         )
+        fragmentScenario.moveToState(RESUMED)
     }
 
     private companion object {

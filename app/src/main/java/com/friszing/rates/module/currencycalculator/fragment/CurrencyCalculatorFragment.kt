@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.ItemAnimator
 import com.friszing.rates.R
 import com.friszing.rates.databinding.FragmentCurrencyRatesBinding
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModel

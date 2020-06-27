@@ -12,11 +12,11 @@ import com.friszing.rates.module.currencycalculator.repository.CurrencyCalculato
 import com.friszing.rates.module.currencycalculator.service.CurrencyRateService
 import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeBaseCalculationValueUseCase
 import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorChangeCalculationValueUseCase
+import com.friszing.rates.module.currencycalculator.usecase.CurrencyCalculatorFetchCurrenciesUseCase
 import com.friszing.rates.module.currencycalculator.viewmodel.CurrencyCalculatorFragmentViewModelFactory
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
-import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.Retrofit
 
 @Module
@@ -47,14 +47,11 @@ open class CurrencyCalculatorModule {
     open fun provideCurrencyRateRepository(
         service: CurrencyRateService,
         responseMapper: CurrencyRateListResponseMapper,
-        currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
         configuration: CurrencyCalculatorConfiguration
     ): CurrencyCalculatorRepository = CurrencyCalculatorRepositoryImpl(
         service,
         responseMapper,
-        currencyCalculatorItemListMapper,
-        configuration,
-        IO
+        configuration
     )
 
     @CurrencyCalculatorScope
@@ -103,14 +100,26 @@ open class CurrencyCalculatorModule {
 
     @CurrencyCalculatorScope
     @Provides
-    open fun provideCurrencyCalculatorFragmentViewModelFactory(
+    open fun provideCurrencyCalculatorFetchCurrenciesUseCase(
         ratesRepository: CurrencyCalculatorRepository,
-        currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper,
+        configuration: CurrencyCalculatorConfiguration,
+        currencyCalculatorItemListMapper: CurrencyCalculatorItemListMapper,
+        currencyCalculatorExceptionMapper: CurrencyCalculatorExceptionMapper
+    ): CurrencyCalculatorFetchCurrenciesUseCase = CurrencyCalculatorFetchCurrenciesUseCaseImpl(
+        ratesRepository,
+        configuration,
+        currencyCalculatorItemListMapper,
+        currencyCalculatorExceptionMapper
+    )
+
+    @CurrencyCalculatorScope
+    @Provides
+    open fun provideCurrencyCalculatorFragmentViewModelFactory(
+        fetchCurrenciesUseCase: CurrencyCalculatorFetchCurrenciesUseCase,
         changeCalculationValueUseCase: CurrencyCalculatorChangeCalculationValueUseCase,
         changeBaseCalculationValueUseCase: CurrencyCalculatorChangeBaseCalculationValueUseCase
     ) = CurrencyCalculatorFragmentViewModelFactory(
-        ratesRepository,
-        currencyCalculatorExceptionMapper,
+        fetchCurrenciesUseCase,
         changeCalculationValueUseCase,
         changeBaseCalculationValueUseCase
     )

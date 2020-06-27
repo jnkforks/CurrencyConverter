@@ -16,6 +16,8 @@ class CurrencyCalculatorItemListMapperImpl(
         currencyRateList: CurrencyRateList,
         calculationValue: Double
     ): List<CurrencyCalculatorItem> {
+        if (currencyRateList.baseCurrency.isBlank()) return emptyList()
+
         val baseCurrencyItem = CurrencyCalculatorItem(
             currencyDetailProvider.provide(currencyRateList.baseCurrency),
             calculationValue

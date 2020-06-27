@@ -10,7 +10,6 @@ import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.module.currencycalculator.model.CurrencyDetail
 import com.friszing.rates.utils.formatCurrency
 
-
 abstract class CurrencyCalculatorItemViewHolder<out T : TextView>(
     view: View
 ) : RecyclerView.ViewHolder(view) {

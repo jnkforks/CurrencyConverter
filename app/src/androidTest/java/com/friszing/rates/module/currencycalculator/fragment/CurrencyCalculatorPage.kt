@@ -7,9 +7,16 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.matcher.ViewMatchers.Visibility
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.friszing.rates.module.currencycalculator.model.CurrencyCalculatorItem
 import com.friszing.rates.R
@@ -18,7 +25,7 @@ import com.friszing.rates.utils.atPosition
 import com.friszing.rates.utils.childOfViewAtPositionWithMatcher
 import com.friszing.rates.utils.formatCurrency
 import com.google.common.truth.Truth.assertThat
-import org.junit.Assert
+import org.hamcrest.Matchers.not
 
 internal fun currencyCalculatorPage(
     action: CurrencyCalculatorPage.() -> Unit
@@ -151,16 +158,23 @@ internal class CurrencyCalculatorPage {
         )
     }
 
-    fun checkCurrencyInputEnabled(position: Int, enabled: Boolean) = also {
-        CURRENCY_RATES_LIST.check(
-            matches(
-                childOfViewAtPositionWithMatcher(
-                    R.id.amount,
-                    position,
-                    if (enabled) isEnabled() else isDisplayed()
+    fun checkKeyBoardIsShown(position: Int, enabled: Boolean) = also {
+        CURRENCY_RATES_LIST.perform(
+            scrollToPosition<CurrencyCalculatorItemViewHolder<TextView>>(
+                position
+            )
+        )
+        CURRENCY_RATES_LIST.perform(
+            actionOnItemAtPosition<CurrencyCalculatorItemViewHolder<TextView>>(
+                position,
+                actionOnChild(
+                    click(),
+                    R.id.amount
                 )
             )
         )
+
+        checkKeyboardVisibility(enabled)
     }
 
     fun checkKeyboardVisibility(isVisible: Boolean) = also {
